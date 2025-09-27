@@ -1,27 +1,27 @@
 ## 3. High-Level Architecture Overview
 ```
-┌───────────┐     ┌──────────────────┐     ┌────────────────┐     ┌────────────────┐
-│ Web Scrapers├──▶│ Ingestion Queue  ├──▶ │ Normalisation & │──▶  │ Canonical       │
-│ (Playwright│     │ (RabbitMQ/SQS)   │     │ Matching Workers│     │ Product Registry │
-│  Workers)  │     └──────────────────┘     └────────────────┘     │ (Postgres)       │
+┌───────────┐     ┌──────────────────┐     ┌──────────────────┐     ┌────────────────┐
+│ Web Scrapers├──▶│  pg-boss Queue   ├──▶ │ Normalisation &   │──▶  │ Canonical       │
+│ (Playwright│     │  (Supabase)      │     │ Matching Workers   │     │ Product Registry │
+│  Workers)  │     └──────────────────┘     └──────────────────┘     │ (Postgres +     │
 └─────▲──────┘                                                   ┌─┴────────────────┐
-      │                                                           │ Optimisation     │
-      │                                                           │ Service (Node)   │
+      │                                                           │ Prisma Client    │
+      │                                                           │ & NestJS         │
       │                                                           └─▲─────┬─────────┘
 ┌─────┴────┐                                                    ┌──┴──┐  │
 │ Scheduler│                                                    │ REST│  │
-│ (Airflow │                                                    │/Graph│  │
-│ /Cron)   │                                                    │  API │  │
+│ (Temporal│                                                    │/Graph│  │
+│  /Cron)  │                                                    │  API │  │
 └──────────┘                                                    └──▲──┘  │
                                                                    │     │
                    ┌──────────────────────────┐                    │     │
                    │ Frontend Web App (Next.js)│◀──────────────────┘     │
-                   │ + Auth & Preferences      │                          │
+                   │ + Supabase Auth           │                          │
                    └──────────────┬───────────┘                          │
                                   │                                      │
                                   ▼                                      │
                         ┌──────────────────────┐   Receipts / Feedback   │
-                        │ Object Storage (S3 /│◀─────────────────────────┘
-                        │ Supabase Storage)    │
+                        │ Supabase Storage /   │◀────────────────────────┘
+                        │ CDN-backed downloads │
                         └──────────────────────┘
 ```
