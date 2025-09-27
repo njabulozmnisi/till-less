@@ -1,15 +1,15 @@
 ## 6. Technology Stack
 | Layer | Tech Choice | Rationale |
 | --- | --- | --- |
-| Scrapers | TypeScript + Playwright + pnpm | Strong browser automation support, reuse shared TypeScript utilities, easy packaging via Docker. |
-| Scheduler | Temporalite (self-hosted) or GitHub Actions cron | Free-to-run orchestration with retries and visibility; definitions stay in TypeScript. |
-| Queue | `pg-boss` on Supabase Postgres | Queue built on existing Postgres instance; works within Supabase free tier without extra services. |
-| Data Storage | Supabase Postgres 14 + Prisma | Managed Postgres plus Prisma schema management for type-safe access. |
-| Cache / Rate Limits | Upstash Redis (free tier) or in-DB counters | Provides distributed locks and rate limiting without paid infra. |
-| Backend & Optimisation | NestJS (TypeScript) + Prisma + mathjs | Consistent TypeScript stack, modular architecture, numerical helpers for optimisation. |
-| Frontend | Next.js (TypeScript, App Router) | Mature React meta-framework with Vercel hobby tier hosting. |
-| Auth | Supabase Auth (JWT) | Built-in auth provider integrates with frontend and backend easily. |
-| Object Storage | Supabase Storage + CDN (e.g., Cloudflare) | Affordable S3-compatible storage with signed URL support. |
-| Analytics | Metabase (Docker) or Supabase Dashboard | OSS analytics deployable on free Render/railway tiers. |
-| Observability | OpenTelemetry SDK + Grafana Cloud free tier | Centralised metrics/logs/traces without cost. |
-| CI/CD | GitHub Actions + Docker | Free per repo; automates lint/test/build/deploy pipelines. |
+| Scrapers | TypeScript + Playwright + pnpm | Shared language across stack, reliable browser automation, docker-friendly. |
+| Scheduler | Temporalite (Docker Compose) with TypeScript workflows; GitHub Actions cron fallback | Durable, observable orchestration running locally for free; GitHub cron provides safety net for nightly jobs. |
+| Queue | `pg-boss` (Supabase Postgres) | Queue built directly on Postgres, no extra infra, compatible with free tier. |
+| Data Storage | Supabase Postgres 14 + Prisma ORM | Managed Postgres with migrations and typed access via Prisma. |
+| Auth | BetterAuth (self-hosted) | Open-source auth provider issuing JWTs/refresh tokens; integrates with Next.js/NestJS without vendor lock-in. |
+| Backend & Optimisation | NestJS (TypeScript) + Prisma + mathjs | Modular architecture, dependency injection, strong typing; math helpers for optimisation rules. |
+| Frontend | Next.js (TypeScript) + BetterAuth | Mature React framework deployed on Vercel hobby tier; BetterAuth SDK handles auth flows. |
+| Cache / Rate Limits | Upstash Redis (free tier) or Postgres advisory locks | Lightweight caching and throttling without managed service cost. |
+| Object Storage | Supabase Storage + CDN (e.g., Cloudflare) | S3-compatible storage with signed URLs; free-tier friendly. |
+| Analytics | Metabase OSS on Railway/Render free tier | Quick dashboarding over Postgres without licensing fees. |
+| Observability | OpenTelemetry SDK + Grafana Cloud/Logtail free tiers | Centralised metrics/logs/traces within cost constraints. |
+| CI/CD | GitHub Actions + Docker | Free automation for lint/test/build/deploy pipelines.
