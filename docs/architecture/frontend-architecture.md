@@ -44,7 +44,7 @@ This document details the frontend architecture for TillLess, focusing on state 
 ### Development Tools
 - **ESLint**: **9.17.0** (Linting, flat config)
 - **Prettier**: **3.4.2** (Code formatting)
-- **Turbo**: **2.3.3** (Monorepo build orchestration)
+- **Nx**: **20.3.2** (Monorepo build system with caching and code generation)
 
 ## 2. Directory Structure
 

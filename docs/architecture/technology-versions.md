@@ -202,7 +202,7 @@ docker --version  # Docker version 27.4.0
 
 | Package | Version | Notes |
 |---------|---------|-------|
-| **turbo** | **2.3.3** | Monorepo build system |
+| **nx** | **20.3.2** | Monorepo build system with caching |
 | **tsx** | **4.19.2** | TypeScript execution |
 | **tsup** | **8.3.5** | TypeScript bundler |
 | **esbuild** | **0.24.2** | Fast bundler |

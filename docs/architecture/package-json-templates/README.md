@@ -11,7 +11,6 @@ This directory contains reference `package.json` files for all TillLess workspac
 | **backend-package.json** | NestJS API server | Copy to `apps/backend/package.json` |
 | **scraping-workers-package.json** | Playwright scraping workers | Copy to `packages/ingestion-workers/package.json` |
 | **pnpm-workspace.yaml** | pnpm workspace configuration | Copy to project root |
-| **turbo.json** | Turbo monorepo configuration | Copy to project root |
 
 ## 🚀 Quick Start
 
@@ -24,7 +23,6 @@ cd /path/to/tillless
 # Copy root configuration
 cp docs/architecture/package-json-templates/root-package.json ./package.json
 cp docs/architecture/package-json-templates/pnpm-workspace.yaml ./pnpm-workspace.yaml
-cp docs/architecture/package-json-templates/turbo.json ./turbo.json
 
 # Install dependencies
 pnpm install
@@ -161,9 +159,9 @@ pnpm audit --fix
 
 ```
 tillless/
-├── package.json                 # Root config (turbo, prettier, husky)
+├── package.json                 # Root config (nx, prettier, husky)
 ├── pnpm-workspace.yaml          # Workspace definition
-├── turbo.json                   # Build orchestration
+├── nx.json                      # Nx configuration (build caching, tasks)
 ├── pnpm-lock.yaml               # Dependency lock (auto-generated)
 ├── apps/
 │   ├── web/
@@ -272,7 +270,7 @@ docker pull mcr.microsoft.com/playwright:v1.49.1
 - **Frontend Architecture**: `../frontend-architecture.md`
 - **Backend Architecture**: `../04-4-component-breakdown.md`
 - **pnpm Workspaces**: https://pnpm.io/workspaces
-- **Turbo Documentation**: https://turbo.build/repo/docs
+- **Nx Documentation**: https://nx.dev/getting-started/intro
 
 ## ⚠️ Important Notes
 
