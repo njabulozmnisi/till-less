@@ -1,0 +1,33 @@
+{
+  "name": "@tillless/api",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "nx serve api",
+    "build": "nx build api",
+    "start": "node dist/apps/api/main.js",
+    "lint": "nx lint api",
+    "test": "nx test api"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.8",
+    "@nestjs/core": "^10.3.8",
+    "@nestjs/platform-express": "^10.3.8",
+    "@nestjs/config": "^3.2.2",
+    "@nestjs/swagger": "^7.3.1",
+    "pg-boss": "^9.0.3",
+    "better-auth": "^0.6.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.1",
+    "@tillless/database": "workspace:*",
+    "@tillless/shared": "workspace:*",
+    "@tillless/ocr": "workspace:*"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^10.3.2",
+    "@nestjs/schematics": "^10.1.1",
+    "@nestjs/testing": "^10.3.8",
+    "@types/express": "^4.17.21",
+    "typescript": "^5.4.5"
+  }
+}

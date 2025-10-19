@@ -1,0 +1,18 @@
+{
+  "name": "@tillless/database",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "prisma:generate": "nx run database:prisma-generate",
+    "prisma:migrate": "nx run database:prisma-migrate",
+    "prisma:deploy": "nx run database:prisma-deploy",
+    "seed": "nx run database:seed"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.13.0"
+  },
+  "devDependencies": {
+    "prisma": "^5.13.0",
+    "typescript": "^5.4.5"
+  }
+}

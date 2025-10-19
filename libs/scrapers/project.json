@@ -1,0 +1,46 @@
+{
+  "name": "scrapers",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/scrapers/src",
+  "projectType": "library",
+  "tags": ["type:lib", "scope:backend"],
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/libs/scrapers",
+        "main": "libs/scrapers/src/index.ts",
+        "tsConfig": "libs/scrapers/tsconfig.lib.json",
+        "assets": ["libs/scrapers/*.md", "libs/scrapers/Dockerfile"]
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["libs/scrapers/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "libs/scrapers/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "docker-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "docker build -f libs/scrapers/Dockerfile -t tillless-scrapers:latest ."
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "ts-node libs/scrapers/src/main.ts"
+      }
+    }
+  }
+}

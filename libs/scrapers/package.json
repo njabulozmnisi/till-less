@@ -1,0 +1,22 @@
+{
+  "name": "@tillless/scrapers",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "nx build scrapers",
+    "docker:build": "nx run scrapers:docker-build",
+    "serve": "nx serve scrapers",
+    "test": "nx test scrapers"
+  },
+  "dependencies": {
+    "playwright": "^1.43.1",
+    "playwright-core": "^1.43.1",
+    "pg-boss": "^9.0.3",
+    "@tillless/database": "workspace:*",
+    "@tillless/shared": "workspace:*"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.43.1",
+    "typescript": "^5.4.5"
+  }
+}

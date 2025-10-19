@@ -1,4 +1,69 @@
 # BMAD (local only)
 .bmad-core/
 .bmad-*/
+
+# See http://help.github.com/ignore-files/ for more about ignoring files.
+
+# Nx
+.nx/cache
+.nx/workspace-data
+
+# compiled output
+/dist
+/tmp
+/out-tsc
+
+# dependencies
+node_modules
+
+# IDEs and editors
+/.idea
 .idea
+.project
+.classpath
+.c9/
+*.launch
+.settings/
+*.sublime-workspace
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# misc
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Next.js
+.next
+out
+
+# Prisma
+prisma/migrations/migration_lock.toml
+
+# Railway
+.railway
+
+# Logs
+*.log
+logs

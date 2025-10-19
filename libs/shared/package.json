@@ -1,0 +1,15 @@
+{
+  "name": "@tillless/shared",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "build": "nx build shared",
+    "test": "nx test shared"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}

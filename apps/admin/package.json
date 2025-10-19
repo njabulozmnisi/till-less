@@ -1,0 +1,32 @@
+{
+  "name": "@tillless/admin",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "nx serve admin",
+    "build": "nx build admin",
+    "start": "nx start admin",
+    "lint": "nx lint admin",
+    "test": "nx test admin"
+  },
+  "dependencies": {
+    "next": "^14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-hook-form": "^7.51.4",
+    "@hookform/resolvers": "^3.3.4",
+    "zod": "^3.23.8",
+    "better-auth": "^0.6.0",
+    "@tillless/shared": "workspace:*",
+    "@tillless/database": "workspace:*",
+    "@tillless/ocr": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "autoprefixer": "^10.4.19",
+    "postcss": "^8.4.38",
+    "tailwindcss": "^3.4.3",
+    "typescript": "^5.4.5"
+  }
+}

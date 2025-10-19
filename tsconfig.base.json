@@ -1,0 +1,35 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["ES2022", "DOM"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "strict": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "baseUrl": ".",
+    "paths": {
+      "@tillless/database": ["libs/database/src/index.ts"],
+      "@tillless/scrapers": ["libs/scrapers/src/index.ts"],
+      "@tillless/ocr": ["libs/ocr/src/index.ts"],
+      "@tillless/shared": ["libs/shared/src/index.ts"],
+      "@tillless/shared/types": ["libs/shared/src/types/index.ts"],
+      "@tillless/shared/utils": ["libs/shared/src/utils/index.ts"],
+      "@tillless/shared/constants": ["libs/shared/src/constants/index.ts"]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}
