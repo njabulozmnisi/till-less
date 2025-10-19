@@ -31,10 +31,16 @@
 - Receipt upload endpoints issue pre-signed URLs against Supabase Storage; validation enforces file type and size limits.
 
 ### 4.6 Frontend Web Application
-- Next.js (TypeScript, App Router) deployed on Vercel hobby tier.
-- Integrates BetterAuth SDK for authentication, storing sessions securely and refreshing tokens.
-- Provides shopping list experience, preference management, optimisation results, savings history, and receipts dashboard.
-- Communicates with NestJS backend via REST/GraphQL using fetch/React Query.
+- **Framework**: Next.js (TypeScript, App Router) deployed on Vercel hobby tier.
+- **State Management**: Redux Toolkit manages global state (user preferences, shopping lists, optimisation results, UI state).
+- **Data Fetching**: RTK Query provides type-safe API calls with automatic caching, invalidation, and background refetching.
+- **API Proxy Layer**: Next.js API routes (`/api/*`) act as BFF, proxying requests to NestJS backend while handling:
+  - Request/response transformation for frontend-optimized payloads
+  - Client-side caching headers
+  - Error normalization
+  - Optional request batching
+- **Authentication**: BetterAuth SDK handles auth flows, storing sessions securely and refreshing tokens.
+- **User Experience**: Shopping list creation, preference management, optimisation results, savings history, and receipts dashboard.
 
 ### 4.7 Storage & Files
 - **Supabase Postgres**: Primary OLTP store hosting CPR and application data.

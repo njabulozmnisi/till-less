@@ -6,7 +6,7 @@
 │  Workers)  │     └──────────────────┘     └──────────────────┘     │ (Postgres +     │
 └─────▲──────┘                                                   ┌─┴────────────────┐
       │                                                           │ Prisma Client    │
-      │                                                           │ & NestJS         │
+      │                                                           │ & NestJS Backend │
       │                                                           └─▲─────┬─────────┘
 ┌─────┴────┐                                                    ┌──┴──┐  │
 │ Scheduler│                                                    │ REST│  │
@@ -15,13 +15,22 @@
 └──────────┘                                                    └──▲──┘  │
                                                                    │     │
                    ┌──────────────────────────┐                    │     │
-                   │ Frontend Web App (Next.js)│◀──────────────────┘     │
-                   │ + BetterAuth SDK          │                          │
-                   └──────────────┬───────────┘                          │
-                                  │                                      │
-                                  ▼                                      │
-                        ┌──────────────────────┐   Receipts / Feedback   │
-                        │ Supabase Storage /   │◀────────────────────────┘
-                        │ CDN-backed downloads │
-                        └──────────────────────┘
+                   │ Frontend (Next.js)       │                    │     │
+                   │ ├─ React + Redux + RTK Q │                    │     │
+                   │ └─ BetterAuth SDK        │                    │     │
+                   └──────────┬───────────────┘                    │     │
+                              │                                    │     │
+                              ▼                                    │     │
+                   ┌──────────────────────────┐                    │     │
+                   │ Next.js API Routes (BFF) │────────────────────┘     │
+                   │ - Proxy to NestJS        │                          │
+                   │ - Transform requests     │                          │
+                   │ - Cache responses        │                          │
+                   └──────────┬───────────────┘                          │
+                              │                                          │
+                              ▼                                          │
+                   ┌──────────────────────────┐   Receipts / Feedback    │
+                   │ Supabase Storage /       │◀─────────────────────────┘
+                   │ CDN-backed downloads     │
+                   └──────────────────────────┘
 ```

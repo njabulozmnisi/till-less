@@ -13,7 +13,14 @@ This structure guides engineers on where to place Phase 1 code. The repository f
 │   │   └── test/
 │   ├── optimisation-worker/  # Temporal activities for optimisation
 │   ├── temporal-orchestrator/ # Temporalite workflow definitions & registrations
-│   ├── web/                  # Next.js frontend (App Router)
+│   ├── web/                  # Next.js frontend (App Router + Redux + RTK Query)
+│   │   ├── src/
+│   │   │   ├── app/         # Next.js pages and API routes (BFF)
+│   │   │   ├── store/       # Redux store, slices, and RTK Query APIs
+│   │   │   ├── components/  # React components (shadcn/ui + custom)
+│   │   │   ├── lib/         # Utilities and helpers
+│   │   │   └── types/       # TypeScript type definitions
+│   │   └── public/
 │   └── ingestion-dashboard/  # (Optional) Ops dashboard UI
 ├── packages/
 │   ├── ingestion-workers/    # Playwright scrapers by retailer (each in subfolder)

@@ -140,6 +140,9 @@ Aligned with sharded `docs/architecture/11-11-open-technical-questions.md` (upda
 
 ## 12. References
 - PRD: `docs/prd.md`
+- Frontend Specification: `docs/front-end-spec.md`
+- Frontend Architecture (Redux + RTK Query): `docs/architecture/frontend-architecture.md`
+- API Routes BFF Pattern: `docs/architecture/api-routes-bff.md`
 - CPR Blueprint: `docs/canonical-product-registry.md`
 - Scraping Playbook: `docs/retailer-scraping-playbook.md`
 - Migration Runbook: `db/README.md`
