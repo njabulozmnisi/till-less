@@ -53,11 +53,9 @@ docker --version  # Docker version 27.4.0
 
 | Package | Version | Notes |
 |---------|---------|-------|
-| **tailwindcss** | **3.4.17** | JIT compiler, container queries |
+| **tailwindcss** | **4.1.0** | Complete rewrite, CSS-first config, built-in PostCSS |
 | **@tailwindcss/forms** | **0.5.9** | Form element styling |
 | **@tailwindcss/typography** | **0.5.15** | Prose styling |
-| **postcss** | **8.4.49** | Required by Tailwind |
-| **autoprefixer** | **10.4.20** | CSS vendor prefixes |
 
 ### Radix UI (shadcn/ui base)
 
