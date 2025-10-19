@@ -45,7 +45,8 @@ This document translates the TillLess MVP business requirements (`docs/prd.md`) 
 
 ## 4. Component Breakdown
 ### 4.1 Data Ingestion Layer
-- **Scraper Workers** (`docs/retailer-scraping-playbook.md`): TypeScript Playwright workers packaged as Docker jobs. Each worker targets a specific retailer/store region and emits structured payloads.
+- **Dynamic Retailer System** (`docs/architecture/dynamic-retailer-plugin-architecture.md`): Database-driven retailer management with plugin-based ingestion strategies. Retailers are configured via admin UI without code deployment. Supports multiple ingestion methods per retailer (scraper, API, CSV, manual, webhook, RSS, email parsing).
+- **Scraper Workers** (`docs/retailer-scraping-playbook.md`): TypeScript Playwright workers packaged as Docker jobs. Each worker targets a specific retailer/store region and emits structured payloads. Dynamically discovered via RetailerAdapterRegistry.
 - **Scheduler**: Temporalite workflows (TypeScript) coordinate cadence grids with retry/backoff policies; GitHub Actions cron jobs trigger backup nightly syncs.
 - **Ingestion Queue**: `pg-boss` (Postgres-backed queue) running inside Supabase Postgres. Provides retries, scheduling, and fits the free tier.
 - **Delta Detection**: Workers compute `content_hash`; unchanged payloads short-circuit to avoid redundant writes.
@@ -153,6 +154,8 @@ Aligned with sharded `docs/architecture/11-11-open-technical-questions.md` (upda
 - Frontend Specification: `docs/front-end-spec.md`
 - Frontend Architecture (Redux + RTK Query): `docs/architecture/frontend-architecture.md`
 - API Routes BFF Pattern: `docs/architecture/api-routes-bff.md`
+- Dynamic Retailer Plugin Architecture: `docs/architecture/dynamic-retailer-plugin-architecture.md` (database-driven retailers, plugin-based ingestion)
+- Missing Requirements Architecture: `docs/architecture/missing-requirements-architecture.md` (CSV import, PDF export, edge cases)
 - CPR Blueprint: `docs/canonical-product-registry.md`
 - Scraping Playbook: `docs/retailer-scraping-playbook.md`
 - Migration Runbook: `db/README.md`

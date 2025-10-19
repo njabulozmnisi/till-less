@@ -1,0 +1,228 @@
+// Prisma Schema for TillLess Phase 1 MVP
+// Database: PostgreSQL (Supabase)
+// UPDATED: Dynamic Retailer Plugin Architecture
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================================================
+// USER MANAGEMENT
+// ============================================================================
+
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String
+  role      UserRole @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("users")
+}
+
+enum UserRole {
+  USER
+  ADMIN
+  SUPER_ADMIN
+}
+
+// ============================================================================
+// DYNAMIC RETAILER SYSTEM
+// ============================================================================
+
+model Retailer {
+  id          String  @id @default(uuid())
+  slug        String  @unique // e.g., "checkers", "pick-n-pay"
+  name        String              // e.g., "Checkers"
+  displayName String              // e.g., "Checkers Sixty60"
+
+  // Status
+  isActive  Boolean @default(true)
+  isVisible Boolean @default(true) // Show in UI
+
+  // Branding
+  logoUrl     String?
+  brandColor  String? // Hex color
+  websiteUrl  String?
+
+  // Contact
+  supportEmail String?
+  supportPhone String?
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  createdBy String? // Admin user ID
+
+  // Relations
+  ingestionConfigs RetailerIngestionConfig[]
+  stores           Store[]
+  items            RetailerItem[]
+  loyaltyPrograms  LoyaltyProgram[]
+
+  @@map("retailers")
+}
+
+model RetailerIngestionConfig {
+  id         String   @id @default(uuid())
+  retailerId String
+
+  // Ingestion Strategy
+  strategy IngestionStrategy
+  priority Int               @default(0) // Higher priority tried first
+  isActive Boolean           @default(true)
+
+  // Strategy-Specific Configuration (JSON)
+  config Json // { url, selectors, apiKey, fieldMapping, etc. }
+
+  // Scheduling
+  cadence     String?   // Cron expression: "0 */4 * * *"
+  lastRun     DateTime?
+  nextRun     DateTime?
+
+  // Health Metrics
+  successCount Int       @default(0)
+  failureCount Int       @default(0)
+  lastError    String?
+  lastErrorAt  DateTime?
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  retailer Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+
+  @@map("retailer_ingestion_configs")
+}
+
+enum IngestionStrategy {
+  SCRAPER       // Playwright web scraping
+  API           // HTTP API integration
+  CSV_UPLOAD    // Periodic CSV file upload
+  MANUAL        // Manual data entry
+  WEBHOOK       // Retailer pushes data
+  RSS_FEED      // RSS/Atom feed parsing
+  EMAIL_SCRAPER // Parse promotional emails
+}
+
+model Store {
+  id         String @id @default(uuid())
+  retailerId String
+
+  // Store Info
+  name String
+  code String? // Store code (e.g., "JHB001")
+
+  // Location
+  address    String
+  city       String
+  province   String
+  postalCode String?
+  latitude   Decimal?
+  longitude  Decimal?
+
+  // Contact
+  phone String?
+  email String?
+
+  // Operating Hours (JSON)
+  hours Json? // { "monday": "08:00-20:00", ... }
+
+  // Services
+  hasDelivery     Boolean @default(false)
+  hasClickCollect Boolean @default(false)
+
+  // Status
+  isActive Boolean @default(true)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  retailer Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+
+  @@unique([retailerId, code])
+  @@map("stores")
+}
+
+model LoyaltyProgram {
+  id         String @id @default(uuid())
+  retailerId String
+
+  // Program Info
+  name        String
+  description String?
+
+  // Signup
+  signupUrl    String?
+  requiresCard Boolean @default(true)
+
+  // Benefits
+  discountType   String? // PERCENTAGE, FIXED_AMOUNT, POINTS
+  averageSavings Decimal? // Average % savings
+
+  // Status
+  isActive Boolean @default(true)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  retailer Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+
+  @@unique([retailerId, name])
+  @@map("loyalty_programs")
+}
+
+// ============================================================================
+// PRODUCT CATALOG
+// ============================================================================
+
+model Product {
+  id       String  @id @default(uuid())
+  name     String
+  brand    String?
+  category String
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("products")
+}
+
+model RetailerItem {
+  id         String @id @default(uuid())
+  retailerId String
+
+  // Product Info
+  sku  String
+  name String
+
+  // Current Price (denormalized for performance)
+  price        Decimal
+  loyaltyPrice Decimal?
+
+  // Stock
+  inStock Boolean @default(true)
+
+  // Metadata
+  lastScraped DateTime @default(now())
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // Relations
+  retailer Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+
+  @@unique([retailerId, sku])
+  @@map("retailer_items")
+}
