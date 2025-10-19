@@ -96,20 +96,30 @@ This document translates the TillLess MVP business requirements (`docs/prd.md`) 
 Same as sharded `docs/architecture/05-5-key-data-flows.md`.
 
 ## 6. Technology Stack
-| Layer | Tech Choice | Rationale |
-| --- | --- | --- |
-| Scrapers | TypeScript + Playwright + pnpm | Shared language across stack, reliable browser automation, easy Docker packaging. |
-| Scheduler | Temporalite (Docker Compose) + GitHub Actions cron fallback | Durable orchestration with retries; backup cron for nightly jobs. |
-| Queue | `pg-boss` (Supabase Postgres) | Queue built on existing Postgres, no extra services, free-tier compatible. |
-| Data Storage | Supabase Postgres 14 + Prisma ORM | Managed Postgres with type-safe access. |
-| Auth | BetterAuth (self-hosted) | Open-source JWT provider, integrates with Next.js/NestJS without vendor lock-in. |
-| Backend & Optimisation | NestJS (TypeScript) + Prisma + mathjs | Modular architecture, DI, strong typing; numerical helpers for optimisation. |
-| Frontend | Next.js (TypeScript) + BetterAuth SDK | Vercel hobby hosting, smooth auth integration. |
-| Cache / Rate Limits | Upstash Redis (free tier) or Postgres advisory locks | Lightweight caching and throttling without paid infra. |
-| Object Storage | Supabase Storage + CDN (e.g., Cloudflare) | Affordable S3-compatible storage with signed URLs. |
-| Analytics | Metabase OSS on Railway/Render | Quick dashboards over Postgres without licensing fees. |
-| Observability | OpenTelemetry SDK + Grafana Cloud/Logtail | Centralised metrics/logs/traces within free tiers. |
-| CI/CD | GitHub Actions + Docker | Free automation for lint/test/build/deploy.
+
+**📋 Complete Version Specifications:** See `docs/architecture/technology-versions.md` for exact versions, update policies, and security SLAs.
+
+**📦 Package Templates:** See `docs/architecture/package-json-templates/` for ready-to-use package.json files.
+
+| Layer | Tech Choice | Versions | Rationale |
+| --- | --- | --- | --- |
+| Runtime | Node.js LTS + pnpm | Node.js **20.11.1**, pnpm **9.14.2** | LTS support until 2026, workspace-native package manager |
+| Scrapers | TypeScript + Playwright | Playwright **1.49.1**, TypeScript **5.7.2** | Shared language across stack, reliable browser automation, Docker-friendly |
+| Scheduler | Temporalite + GitHub Actions cron | Temporalite **0.3.0**, @temporalio/worker **1.11.3** | Durable orchestration with retries; backup cron for nightly jobs |
+| Queue | pg-boss (Supabase Postgres) | pg-boss **10.1.5** | Queue built on existing Postgres, no extra services, free-tier compatible |
+| Data Storage | Supabase Postgres + Prisma ORM | PostgreSQL **15.10**, Prisma **6.2.1** | Managed Postgres with type-safe access |
+| Auth | BetterAuth (self-hosted) | better-auth **1.0.7** | Open-source JWT provider, integrates with Next.js/NestJS without vendor lock-in |
+| Backend & Optimisation | NestJS + Prisma + mathjs | NestJS **10.4.15**, mathjs **13.2.2** | Modular architecture, DI, strong typing; numerical helpers for optimisation |
+| Frontend | Next.js + Redux Toolkit + BetterAuth | Next.js **15.1.3**, React **18.3.1**, Redux **2.5.0** | App Router + RSC, Redux for state, RTK Query for data, BetterAuth SDK for auth |
+| UI Components | shadcn/ui + Tailwind CSS | Tailwind **3.4.17**, Radix UI **latest** | Accessible components on Radix UI primitives, utility-first styling |
+| Cache / Rate Limits | Upstash Redis or Postgres | Redis **7.4** (Upstash managed) | Lightweight caching and throttling without paid infra |
+| Object Storage | Supabase Storage + CDN | - | Affordable S3-compatible storage with signed URLs |
+| Analytics | Metabase OSS | Latest stable | Quick dashboards over Postgres without licensing fees |
+| Observability | OpenTelemetry + Grafana Cloud | @opentelemetry/sdk-node **0.55.0** | Centralised metrics/logs/traces within free tiers |
+| Testing | Vitest + Playwright + Testing Library | Vitest **2.1.8**, Playwright **1.49.1** | Fast unit testing, reliable E2E, component testing |
+| CI/CD | GitHub Actions + Docker | Docker **27.4.0** | Free automation for lint/test/build/deploy
+
+**Version Management:** All versions use exact pinning (no semver ranges) to ensure reproducible builds. Security updates follow defined SLAs in technology-versions.md.
 
 ## 7. Non-Functional Considerations
 - **Performance**: Cache canonical catalog snapshots per run; precompute unit prices. Use worker pools and queue concurrency controls.

@@ -4,16 +4,47 @@ This document details the frontend architecture for TillLess, focusing on state 
 
 ## 1. Technology Stack
 
-- **Framework**: Next.js 14+ (App Router, TypeScript)
-- **State Management**: Redux Toolkit (@reduxjs/toolkit)
-- **Data Fetching**: RTK Query (included in Redux Toolkit)
-- **UI Components**: shadcn/ui (Radix UI + Tailwind CSS)
-- **Styling**: Tailwind CSS v3+
-- **Authentication**: BetterAuth SDK
-- **Icons**: Lucide React
-- **Animation**: Framer Motion
-- **Forms**: React Hook Form + Zod validation
-- **Testing**: Vitest, React Testing Library, Playwright
+**Version Reference:** See `docs/architecture/technology-versions.md` for complete specifications and update policies.
+
+### Core Framework
+- **Next.js**: **15.1.3** (App Router, React Server Components, Turbopack)
+- **React**: **18.3.1** (Required by Next.js 15)
+- **TypeScript**: **5.7.2** (Strict mode enabled)
+- **Node.js**: **20.11.1 LTS** (Runtime requirement)
+- **pnpm**: **9.14.2** (Package manager)
+
+### State Management & Data Fetching
+- **Redux Toolkit**: **2.5.0** (@reduxjs/toolkit)
+- **React Redux**: **9.1.2** (React 18 compatible hooks)
+- **RTK Query**: **2.5.0** (Included in Redux Toolkit)
+
+### UI & Styling
+- **shadcn/ui**: Latest (Radix UI + Tailwind CSS)
+- **Tailwind CSS**: **3.4.17** (JIT compiler, container queries)
+- **Radix UI**: Latest stable versions (Accessible primitives)
+- **Lucide React**: **0.469.0** (Icon library, 1400+ icons)
+- **Framer Motion**: **11.15.0** (Animation library)
+- **clsx**: **2.1.1** + **tailwind-merge**: **2.6.0** (Class utilities)
+
+### Forms & Validation
+- **React Hook Form**: **7.54.2** (Form state management)
+- **Zod**: **3.24.1** (Schema validation)
+- **@hookform/resolvers**: **3.9.1** (Zod resolver)
+
+### Authentication
+- **BetterAuth**: **1.0.7** (Open-source auth provider)
+- **@better-auth/react**: **1.0.7** (React hooks & components)
+
+### Testing
+- **Vitest**: **2.1.8** (Unit testing, Vite-native)
+- **@testing-library/react**: **16.1.0** (Component testing)
+- **Playwright**: **1.49.1** (E2E testing)
+- **MSW**: **2.7.0** (API mocking)
+
+### Development Tools
+- **ESLint**: **9.17.0** (Linting, flat config)
+- **Prettier**: **3.4.2** (Code formatting)
+- **Turbo**: **2.3.3** (Monorepo build orchestration)
 
 ## 2. Directory Structure
 
