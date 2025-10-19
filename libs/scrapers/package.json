@@ -1,22 +1,36 @@
 {
   "name": "@tillless/scrapers",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
     "build": "nx build scrapers",
     "docker:build": "nx run scrapers:docker-build",
     "serve": "nx serve scrapers",
+    "type-check": "tsc --noEmit",
     "test": "nx test scrapers"
   },
   "dependencies": {
-    "playwright": "^1.43.1",
-    "playwright-core": "^1.43.1",
-    "pg-boss": "^9.0.3",
+    "playwright": "1.49.1",
+    "playwright-core": "1.49.1",
+    "cheerio": "1.0.0",
+    "@temporalio/client": "1.11.3",
+    "@temporalio/worker": "1.11.3",
+    "@temporalio/workflow": "1.11.3",
+    "@temporalio/activity": "1.11.3",
+    "@prisma/client": "6.2.1",
+    "pg-boss": "10.1.5",
+    "date-fns": "4.1.0",
+    "pino": "9.5.0",
+    "pino-pretty": "13.0.0",
+    "zod": "3.24.1",
     "@tillless/database": "workspace:*",
     "@tillless/shared": "workspace:*"
   },
   "devDependencies": {
-    "@playwright/test": "^1.43.1",
-    "typescript": "^5.4.5"
+    "typescript": "5.7.2",
+    "@types/node": "22.10.2",
+    "@playwright/test": "1.49.1",
+    "vitest": "2.1.8",
+    "@vitest/ui": "2.1.8"
   }
 }
