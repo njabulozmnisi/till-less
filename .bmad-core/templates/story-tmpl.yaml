@@ -23,6 +23,18 @@ agent_config:
     - Change Log
 
 sections:
+  - id: github-issue-reference
+    title: GitHub Issue Reference
+    type: metadata
+    template: |
+      **GitHub Issue:** #{{issue_number}}
+      **Issue URL:** {{issue_url}}
+    instruction: |
+      This section is auto-populated when GitHub Issue is created.
+      GitHub Issue is the primary source of truth for workflow tracking.
+    owner: scrum-master
+    editors: [scrum-master]
+
   - id: status
     title: Status
     type: choice

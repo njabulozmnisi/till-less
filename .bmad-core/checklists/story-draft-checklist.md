@@ -32,6 +32,30 @@ REMEMBER: We assume competent developer agents who can:
 
 We're checking for SUFFICIENT guidance, not exhaustive detail.]]
 
+## 0. GITHUB ISSUE INTEGRATION (GitHub-First Workflow)
+
+[[LLM: This project follows GitHub-First workflow as defined in CLAUDE.md. Verify:
+
+1. GitHub Issue was created FIRST before local markdown file
+2. Issue number and URL are captured in the markdown file
+3. Both GitHub Issue and local markdown have same content
+4. Story number (Epic.Story) is present in Issue title for traceability
+5. Proper labels are applied to the Issue
+6. Bidirectional linking exists between Issue and markdown file
+
+The GitHub Issue is the PRIMARY source of truth for workflow tracking.]]
+
+- [ ] GitHub Issue created successfully (#XXX)
+- [ ] Issue title includes story number format: "Story X.Y: Title"
+- [ ] Issue URL captured and included in markdown file header
+- [ ] Issue labels applied correctly (type:, area:, epic:)
+- [ ] Issue body follows CLAUDE.md template (Context, Goals, AC, etc.)
+- [ ] Local markdown file references GitHub Issue at the top
+- [ ] Markdown file includes footer note about Issue being authoritative
+- [ ] GitHub Issue and markdown have same Acceptance Criteria
+- [ ] Story number consistent between Issue title and markdown filename
+- [ ] Issue is in OPEN state and viewable via gh CLI
+
 ## 1. GOAL & CONTEXT CLARITY
 
 [[LLM: Without clear goals, developers build the wrong thing. Verify:
@@ -142,6 +166,7 @@ Be pragmatic - perfect documentation doesn't exist, but it must be enough to pro
 
 | Category                             | Status | Issues |
 | ------------------------------------ | ------ | ------ |
+| 0. GitHub Issue Integration          | _TBD_  |        |
 | 1. Goal & Context Clarity            | _TBD_  |        |
 | 2. Technical Implementation Guidance | _TBD_  |        |
 | 3. Reference Effectiveness           | _TBD_  |        |

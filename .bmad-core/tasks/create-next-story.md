@@ -75,10 +75,49 @@ ALWAYS cite source documents: `[Source: architecture/{filename}.md#{section}]`
 - Ensure file paths, component locations, or module names align with defined structures
 - Document any structural conflicts in "Project Structure Notes" section within the story draft
 
-### 5. Populate Story Template with Full Context
+### 5. Create GitHub Issue FIRST (Primary Source of Truth)
 
-- Create new story file: `{devStoryLocation}/{epicNum}.{storyNum}.story.md` using Story Template
-- Fill in basic story information: Title, Status (Draft), Story statement, Acceptance Criteria from Epic
+**CRITICAL: GitHub Issue must be created BEFORE local markdown file**
+
+- Execute task: `.bmad-core/tasks/create-github-issue-from-story.md`
+- Provide the following data to the task:
+  - `epicNum`, `storyNum`, `storyTitle` (from Step 1)
+  - `context`: Background from epic and previous story insights
+  - `goals`: Story objectives extracted from epic
+  - `nonGoals`: Out-of-scope items
+  - `acceptanceCriteria`: ACs from epic in Given/When/Then format
+  - `approachSketch`: High-level tasks and implementation approach
+  - `risksAndMitigations`: Security, performance, migration risks identified
+  - `testPlan`: Testing requirements from architecture/testing-strategy.md
+  - `dependencies`: External services, previous stories, infrastructure needs
+  - `assetsAndLinks`: Epic reference, architecture docs
+  - `sizeEstimate`: T-shirt size (S/M/L/XL) based on complexity
+  - `moduleArea`: Domain/module (ingestion, backend, frontend, etc.)
+- Capture returned data:
+  - `issueNumber`: GitHub Issue number (e.g., #5)
+  - `issueUrl`: Full URL to the GitHub Issue
+  - `createdAt`: Timestamp
+  - `labels`: Applied labels
+- **VERIFICATION**: Confirm Issue was created successfully via `gh issue view {issueNumber}`
+- If Issue creation fails, HALT and troubleshoot before proceeding to local file creation
+
+### 6. Create Local Markdown File (with GitHub Issue Reference)
+
+- Create new story file: `{devStoryLocation}/{epicNum}.{storyNum}.{story_slug}.md` using Story Template
+- **CRITICAL: Add GitHub Issue reference at the very top:**
+  ```markdown
+  # Story {epicNum}.{storyNum}: {storyTitle}
+
+  **GitHub Issue:** #{issueNumber}
+  **Issue URL:** {issueUrl}
+  **Status:** Draft
+
+  ---
+  ```
+- Fill in story sections mirroring GitHub Issue content:
+  - Story statement (As a... I want... so that...)
+  - Acceptance Criteria (same as in GitHub Issue)
+  - Tasks / Subtasks (detailed breakdown from Approach Sketch)
 - **`Dev Notes` section (CRITICAL):**
   - CRITICAL: This section MUST contain ONLY information extracted from architecture documents. NEVER invent or assume technical details.
   - Include ALL relevant technical details from Steps 2-3, organized by category:
@@ -97,18 +136,44 @@ ALWAYS cite source documents: `[Source: architecture/{filename}.md#{section}]`
   - Include unit testing as explicit subtasks based on the Testing Strategy
   - Link tasks to ACs where applicable (e.g., `Task 1 (AC: 1, 3)`)
 - Add notes on project structure alignment or discrepancies found in Step 4
+- **Add footer note:**
+  ```markdown
+  ---
 
-### 6. Story Draft Completion and Review
+  **Note:** This is a local reference file for development.
+  [GitHub Issue #{issueNumber}]({issueUrl}) is the authoritative source of truth for workflow tracking and team collaboration.
+  ```
+
+### 7. Cross-Reference Validation
+
+**Ensure bidirectional linking between GitHub Issue and local markdown:**
+
+- Verify GitHub Issue title contains story number: `Story {epicNum}.{storyNum}: ...`
+- Verify markdown filename contains story number: `{epicNum}.{storyNum}.{slug}.md`
+- Verify markdown file header references GitHub Issue number: `**GitHub Issue:** #{issueNumber}`
+- **Update GitHub Issue with local file reference:**
+  - Add comment to Issue: `Local story documentation: docs/stories/{epicNum}.{storyNum}.{slug}.md`
+  - Or edit Issue body to include under "Assets & Links" section
+- Confirm both sources have same Acceptance Criteria and Goals
+
+### 8. Story Draft Completion and Review
 
 - Review all sections for completeness and accuracy
 - Verify all source references are included for technical details
 - Ensure tasks align with both epic requirements and architecture constraints
-- Update status to "Draft" and save the story file
+- Verify GitHub Issue and local markdown are synchronized
+- Update status to "Draft" in both GitHub Issue (via comment) and local markdown
 - Execute `.bmad-core/tasks/execute-checklist` `.bmad-core/checklists/story-draft-checklist`
 - Provide summary to user including:
-  - Story created: `{devStoryLocation}/{epicNum}.{storyNum}.story.md`
+  - **GitHub Issue Created:** #{issueNumber} - {issueUrl}
+  - **Local Story File Created:** `{devStoryLocation}/{epicNum}.{storyNum}.{slug}.md`
   - Status: Draft
+  - Labels Applied: {labels}
   - Key technical components included from architecture docs
   - Any deviations or conflicts noted between epic and architecture
   - Checklist Results
-  - Next steps: For Complex stories, suggest the user carefully review the story draft and also optionally have the PO run the task `.bmad-core/tasks/validate-next-story`
+  - Next steps:
+    - Review GitHub Issue for completeness: `gh issue view {issueNumber}`
+    - Review local markdown file for technical details
+    - For complex stories, optionally have PO run `.bmad-core/tasks/validate-next-story`
+    - When ready to implement, developer will use: `git checkout -b feature/{issueNumber}-{slug}`

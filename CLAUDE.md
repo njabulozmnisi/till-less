@@ -1,155 +1,232 @@
-- # Permanent Guideline — Git Flow with Archived Simulated PRs (with Sequential IDs)
+- # Permanent Guideline — Git Flow with **GitHub Issues First** (PR Review as Issue Comment)
 
-You must follow **Git Flow** and **simulate Pull Requests (PRs)** before merging into `develop`. Each simulated PR is archived as a Markdown file and **prefixed with a 4‑digit sequential ID**.
+This project is **Issue‑driven**. The AI agent must **create or update the GitHub Issue first**, capture all context in the Issue, then create a branch, commit incrementally, and post a **PR review as an Issue comment** before merging.
+
+**CRITICAL:** If work was started without a GitHub Issue, the agent must **create one immediately** before proceeding to merge.
+
+Branches are **not deleted** after merge. There is **no `.simulated-prs/` folder** and **no sequential IDs** — the GitHub Issue is the single source of truth.
 
 ---
 
-## Branching Rules
+## High‑Level Flow
+
+1) **Issue First** → 2) **Branch** → 3) **Commits** → 4) **Issue Gate & PR Review (Issue comment)** → 5) **Merge** → 6) **Post‑merge updates**
+
+---
+
+## 1) Issue‑First Rules (Agent must do these before branching)
+
+When starting any task, the agent must **create a GitHub Issue** (or update an existing one) with:
+
+### Title
+A concise, outcome‑oriented title, e.g. `Add CSV export for customers`
+
+### Labels
+- `type: feature | bug | chore | refactor | docs | perf | test | ci | build`
+- `area: <domain/module>` (optional)
+- Priority label if needed (`P1`, `P2`, ...)
+- Project/Milestone linkage if used
+
+### Issue Description Template
+```md
+## Context
+- Background and problem framing
+
+## Goals
+- What success looks like (bullet points)
+
+## Non-Goals
+- Explicitly out-of-scope items
+
+## Acceptance Criteria (Given/When/Then)
+- Given ..., When ..., Then ...
+- Given ..., When ..., Then ...
+
+## Approach Sketch
+- High-level implementation plan
+- Data model / API changes (if any)
+- Observability (logs, metrics, alerts)
+
+## Risks & Mitigations
+- Security, privacy, performance, data migrations, rollbacks
+
+## Test Plan
+- Unit / integration / manual checks
+
+## Dependencies
+- External services, feature flags, secrets, env vars
+
+## Assets & Links
+- Designs, docs, related issues
+
+## Estimate & Target
+- T-shirt size (S/M/L/XL) and/or time estimate
+- Target release / milestone
+```
+
+Record the **Issue number** (e.g., `#123`).
+
+---
+
+## 2) Branch Naming (Git Flow + Issue IDs)
 
 Primary branches:
-- `main` — stable production branch
-- `develop` — integration branch
+- `main` — stable production
+- `develop` — integration
 
-Working branches:
-- `feature/<slug>` — new features
-- `bugfix/<slug>` — non-critical fixes
-- `hotfix/<slug>` — urgent production fixes (merge into `main`, then back-merge into `develop`)
-- `release/<version>` — final preparation before shipping to `main`
+Working branches (must include the Issue number):
+- `feature/<issue>-<slug>` → `feature/123-add-csv-export`
+- `bugfix/<issue>-<slug>` → `bugfix/456-fix-token-refresh`
+- `hotfix/<issue>-<slug>` → `hotfix/789-fix-prod-crash`
+- `release/<version>` → `release/1.4.0`
 
----
-
-## Commit Rules
-
-- Commit **small and often**
-- Use **Conventional Commits** (`feat:`, `fix:`, `docs:`, `test:`, `refactor:`, `build:`, `ci:`)
-- Write commit messages that state **why**, not only what
+> **Note:** Branches are **not deleted** after merge.
 
 ---
 
-## Simulated PR Archive & Naming (Sequential IDs)
+## 3) Commit Rules (Conventional + Issue reference)
 
-- Archive folder: `.simulated-prs/`
-- **File name format (4-digit padded):**  
-  `NNNN-<branch-name>.md`  
-  Examples:  
-  `.simulated-prs/0001-feature-add-login.md`  
-  `.simulated-prs/0002-bugfix-session-timeout.md`
-
-**Numbering rules:**
-1. Use **4-digit, zero-padded** IDs (`0001`, `0002`, … `9999`).
-2. **Never reuse** IDs; each new simulated PR gets the **next number**.
-3. Determine `NNNN` by scanning existing files in `.simulated-prs/` and selecting **max + 1**.
-4. If `.simulated-prs/` does not exist, **start at `0001`**.
-5. The number is assigned when you **open** the simulated PR (file creation time), not at merge time.
-
-*(Optional but recommended)* Maintain an index file `.simulated-prs/INDEX.md` listing `NNNN`, title, branch, and date for quick lookup.
+- Commit **small and often**, with clear “why”
+- Use Conventional Commits referencing the Issue, e.g.:
+  ```
+  feat(123): add CSV export
+  fix(456): handle token refresh on 401
+  refactor(123): extract CSV writer
+  ```
+- Include an auto‑close line at least once (usually in the squash message):
+  ```
+  Closes #123
+  ```
+> Auto‑close triggers when merging into the default branch (`main`). If merging into `develop`, close the Issue manually at release time or when appropriate.
 
 ---
 
-## Simulated PR Workflow (for every `feature/*`, `bugfix/*`, `release/*`, `hotfix/*`)
+## 4) Issue-First Gate: Create Issue if None Exists, Then Post PR Review
 
-Before merging a branch into `develop`, you must perform a **Simulated PR** stored in:
+**CRITICAL: If no GitHub Issue exists for the work being done, create one FIRST before proceeding.**
 
-```
-.simulated-prs/NNNN-<branch-name>.md
-```
+### Step 4a: Verify or Create GitHub Issue
 
-### Simulated PR Steps
+Before merging, ensure a GitHub Issue exists for the work:
 
-1. **Allocate next ID & create file** `.simulated-prs/NNNN-<branch-name>.md`  
-   - Choose `NNNN` per the numbering rules above.
-2. **Fill it using the PR template** (below).
-3. **Generate and include**:
-   - `git diff --stat` vs `develop`
-   - Summary of changes
-4. **Run quality checks**:
-   - Lint
-   - Typecheck
-   - Automated tests (if any)
-   - Basic secret scan
-5. **Write a Self-Review** (nits, risks, follow-ups).
-6. **Approve the Simulated PR** once checks pass ✅.
+**If Issue exists:** Proceed to Step 4b (post PR review comment)
 
----
+**If NO Issue exists:**
+1. **STOP immediately** - do not merge without an Issue
+2. **Create GitHub Issue** using the Issue template (see Section 1):
+   ```bash
+   gh issue create \
+     --title "{Descriptive title for work done}" \
+     --body "$(cat <<'EOF'
+   ## Context
+   [Describe what was implemented and why]
 
-## Merge Rules
+   ## Goals
+   - [What this work achieves]
 
-- `feature/*` & `bugfix/*` → **squash-merge into `develop`**
-- `release/*` → **squash-merge into `main`**, tag version, then back-merge `main` into `develop`
-- `hotfix/*` → **squash-merge into `main`**, tag version, then back-merge `main` into `develop`
+   ## Acceptance Criteria
+   - [How to verify the work is complete]
 
----
+   ## Test Plan
+   - [Tests run and validation performed]
+   EOF
+   )" \
+     --label "type:{feature|bug|chore}" \
+     --label "area:{module}"
+   ```
+3. **Capture Issue number** (e.g., #123)
+4. **Update branch name** if needed: `git branch -m feature/{issue}-{slug}`
+5. **Amend commits** to reference Issue: `feat({issue}): ...` or add `Relates to #{issue}` in commit messages
+6. Now proceed to Step 4b
 
-## Post‑Merge Ritual (all branches)
+### Step 4b: Post PR Review as Issue Comment
 
-1. **Delete the task branch** that was merged.
-2. **Switch back to `develop`** (`git checkout develop`).
-3. **Safe Push Gate (push only if BOTH are true):**
-   - The merge **succeeded** (no conflicts, exit code 0).
-   - You are **currently on `develop`**.
-4. **If both criteria are met, push `develop`**: `git push origin develop`.
-5. Update `.simulated-prs/INDEX.md` (if you keep one) with `NNNN`, title, and date.
-6. Continue with the next task.
-
-> Rationale: This prevents accidental pushes from the wrong branch or after a failed/partial merge and preserves an auditable trail of simulated PRs.
-
----
-
-## Simulated PR Template
+Once the GitHub Issue exists, the agent must **post a PR review as a comment on the Issue** using this template:
 
 ```md
-# Simulated PR — <type(scope): short summary>
+### PR Review
 
-## Context / Why
-- Problem or goal
+**Branch**
+`feature/<issue>-<slug>`
 
-## Change Summary
-- High-level bullet list of changes
-
-## Diff Stat
+**Diff Stat**
 ```
 <insert `git diff --stat origin/develop...HEAD`>
 ```
 
-## Risks & Impact
-- Security?
-- Performance?
-- Data migrations?
+**Change Summary**
+- High-level bullets of what changed
+
+**Risks & Impact**
+- Security implications?
+- Performance impacts?
+- Data migrations required?
 - User-visible changes?
 
-## Test Plan
-- Automated tests
-- Manual steps
+**Test Plan**
+- Automated tests run: [specify which tests]
+- Manual verification: [steps performed]
 
-## Checks
+**Quality Checks**
 - [ ] Lint clean
 - [ ] Typecheck clean
 - [ ] Tests pass
-- [ ] Secret scan clean
+- [ ] Secrets scan clean
 
-## Self-Review Notes
-**Nits**
-- …
-
-**Risks**
-- …
-
-**Follow-ups**
-- …
+**Self-Review Notes**
+- Nits: [minor issues or cleanup needed]
+- Risks: [potential concerns]
+- Follow-ups: [future work or tech debt]
 ```
 
----
-
-## Behavior Summary
-
-Claude must always:
-
-- Follow **Git Flow**
-- Create a **new simulated PR file per branch**
-- **Prefix the file name with a 4‑digit sequential ID** and store it in `.simulated-prs/`
-- Run all checks before merging
-- **Squash-merge using correct flow rules**
-- **After merge: delete branch → checkout `develop` → only then push `develop` if both criteria are met**
-- Keep history clean, incremental, and traceable
+> **Approval Gate:** The PR review comment serves as the approval gate. Only proceed to merge if:
+> - All quality checks are ✅
+> - Self-review looks sound
+> - No critical risks identified
+> - A GitHub Issue exists and is referenced
 
 ---
+
+## 5) Merge Rules (Git Flow)
+
+| Branch Type | Merge Into | After Merge |
+|------------|------------|-------------|
+| `feature/*` | `develop` | checkout `develop` → push (if safe) |
+| `bugfix/*` | `develop` | checkout `develop` → push (if safe) |
+| `release/*` | `main` | tag `vX.Y.Z` → back‑merge `main` → `develop` |
+| `hotfix/*` | `main` | tag → back‑merge `main` → `develop` |
+
+**Safe Push Gate** — Push only if BOTH are true:  
+1) the merge succeeded (exit code 0), and  
+2) the current branch is `develop`.
+
+> Branches remain available for traceability; do **not** delete them.
+
+---
+
+## 6) Post‑Merge Updates (Agent responsibilities)
+
+- **Issue updates**
+  - If merged to default branch (`main`), ensure the Issue is **closed** (via `Closes #<issue>` or manually)
+  - If merged to `develop`, **comment** with the merge commit link and keep the Issue open until release (or close when appropriate)
+  - Move the Issue in **Project** or **Milestone**
+
+- **Repository updates**
+  - `git checkout develop`
+  - If safe, `git push origin develop`
+
+- **Documentation**
+  - If you maintain release notes, add the Issue and summary under the relevant version
+
+---
+
+## Behavior Summary (agent must always)
+
+- **Create or update the GitHub Issue first** with full context (NEVER start work without an Issue)
+- **Verify Issue exists before merging** - if no Issue exists, create one immediately
+- Use the **Issue number in branch names and commits**
+- Post a **PR review as an Issue comment** before merge (no repo files)
+- Follow **Git Flow** for merges
+- After merge, **checkout `develop`** and **push only if safe**
+- **Do not delete branches** after merge
+- Keep work small, clear, and traceable
