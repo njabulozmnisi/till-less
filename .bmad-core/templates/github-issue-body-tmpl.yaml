@@ -1,0 +1,286 @@
+# <!-- Powered by BMAD™ Core -->
+template:
+  id: github-issue-body
+  name: GitHub Issue Body Template
+  version: 1.0
+  description: Template for creating GitHub Issues following CLAUDE.md Issue-First workflow
+  output:
+    format: markdown
+    destination: github-issue
+
+# This template follows the Issue template structure defined in CLAUDE.md
+# It maps story data to the GitHub Issue format for Issue-First Git Flow
+
+metadata:
+  title_format: "Story {{epic_num}}.{{story_num}}: {{story_title}}"
+  labels:
+    - "type:{{story_type}}"
+    - "area:{{module_area}}"
+    - "epic:{{epic_num}}"
+
+sections:
+  - id: context
+    title: Context
+    instruction: |
+      Background and problem framing for this story.
+      Include why this story exists and what problem it solves.
+    template: |
+      ## Context
+      {{context_text}}
+
+  - id: goals
+    title: Goals
+    instruction: |
+      What success looks like for this story (bullet points).
+      Clear, measurable objectives.
+    template: |
+      ## Goals
+      {{goals_list}}
+
+  - id: non-goals
+    title: Non-Goals
+    instruction: |
+      Explicitly out-of-scope items to prevent scope creep.
+    template: |
+      ## Non-Goals
+      {{non_goals_list}}
+
+  - id: acceptance-criteria
+    title: Acceptance Criteria (Given/When/Then)
+    instruction: |
+      Testable acceptance criteria in Given/When/Then format.
+      Each criterion should be verifiable.
+    template: |
+      ## Acceptance Criteria (Given/When/Then)
+      {{acceptance_criteria_gwt}}
+
+  - id: approach-sketch
+    title: Approach Sketch
+    instruction: |
+      High-level implementation plan including:
+      - Key technical tasks
+      - Data model / API changes (if any)
+      - Observability considerations (logs, metrics, alerts)
+    template: |
+      ## Approach Sketch
+      {{approach_tasks}}
+
+  - id: risks-mitigations
+    title: Risks & Mitigations
+    instruction: |
+      Identify and mitigate risks including:
+      - Security implications
+      - Privacy concerns
+      - Performance impacts
+      - Data migrations required
+      - Rollback strategies
+    template: |
+      ## Risks & Mitigations
+      {{risks_list}}
+
+  - id: test-plan
+    title: Test Plan
+    instruction: |
+      Testing strategy including:
+      - Unit test requirements
+      - Integration test scenarios
+      - Manual verification steps
+      - Performance/load testing (if applicable)
+    template: |
+      ## Test Plan
+      {{test_plan_details}}
+
+  - id: dependencies
+    title: Dependencies
+    instruction: |
+      External dependencies and prerequisites:
+      - External services
+      - Feature flags
+      - Secrets / environment variables
+      - Other stories or epics that must complete first
+    template: |
+      ## Dependencies
+      {{dependencies_list}}
+
+  - id: assets-links
+    title: Assets & Links
+    instruction: |
+      Related resources and documentation:
+      - Epic reference
+      - Local story file path
+      - Architecture documents
+      - Design files (Figma, etc.)
+      - Related GitHub Issues
+    template: |
+      ## Assets & Links
+      - **Epic:** Epic {{epic_num}} - {{epic_title}}
+      - **Local Story File:** `docs/stories/{{epic_num}}.{{story_num}}.{{story_slug}}.md`
+      - **Architecture:** {{architecture_refs}}
+      {{additional_links}}
+
+  - id: estimate-target
+    title: Estimate & Target
+    instruction: |
+      Story sizing and timeline:
+      - T-shirt size (S/M/L/XL) or story points
+      - Target sprint or milestone
+      - Dependencies on other work
+    template: |
+      ## Estimate & Target
+      - **Size:** {{size_estimate}}
+      - **Epic:** {{epic_num}}
+      - **Story:** {{story_num}}
+      - **Sprint:** {{sprint_target}}
+      {{additional_estimates}}
+
+# Variable definitions for template rendering
+variables:
+  epic_num:
+    type: integer
+    description: Epic number (1, 2, 3, ...)
+    required: true
+
+  story_num:
+    type: integer
+    description: Story number within epic (1, 2, 3, ...)
+    required: true
+
+  story_title:
+    type: string
+    description: Short descriptive title for the story
+    required: true
+
+  story_slug:
+    type: string
+    description: URL-safe slug derived from story title
+    required: true
+
+  story_type:
+    type: choice
+    choices: [feature, bug, chore, refactor, docs, perf, test, ci, build]
+    default: feature
+    description: Type of story for labeling
+
+  module_area:
+    type: string
+    description: Module or domain area (e.g., ingestion, backend, frontend)
+    required: true
+
+  epic_title:
+    type: string
+    description: Full title of the parent epic
+    required: false
+
+  context_text:
+    type: text
+    description: Background and problem framing
+
+  goals_list:
+    type: list
+    description: Bullet list of success criteria
+
+  non_goals_list:
+    type: list
+    description: Bullet list of out-of-scope items
+
+  acceptance_criteria_gwt:
+    type: list
+    description: Acceptance criteria in Given/When/Then format
+
+  approach_tasks:
+    type: text
+    description: High-level implementation approach and tasks
+
+  risks_list:
+    type: list
+    description: Risks and their mitigations
+
+  test_plan_details:
+    type: text
+    description: Testing strategy and requirements
+
+  dependencies_list:
+    type: list
+    description: External dependencies and prerequisites
+
+  architecture_refs:
+    type: list
+    description: Links to relevant architecture documents
+
+  additional_links:
+    type: text
+    description: Any additional resource links
+
+  size_estimate:
+    type: choice
+    choices: [S, M, L, XL, "1 point", "2 points", "3 points", "5 points", "8 points"]
+    default: M
+    description: Story size estimate
+
+  sprint_target:
+    type: string
+    description: Target sprint or milestone
+    required: false
+
+  additional_estimates:
+    type: text
+    description: Any additional estimation notes
+    required: false
+
+# Example usage
+example:
+  title: "Story 1.2: Shoprite/PnP Ingestion"
+  labels:
+    - "type:feature"
+    - "area:ingestion"
+    - "epic:1"
+  body: |
+    ## Context
+    Epic 1 established the data backbone with Checkers/Sixty60 ingestion. Story 1.2 extends
+    coverage to Shoprite and Pick n Pay retailers, enabling wider price comparison.
+
+    ## Goals
+    - Ingest catalogue and price data from Shoprite and Pick n Pay web platforms
+    - Populate CPR tables with 500+ SKUs per retailer
+    - Ensure data quality matches Checkers ingestion (Story 1.1)
+
+    ## Non-Goals
+    - Woolworths, Makro, Food Lover's (covered in Story 1.3)
+    - Loyalty program integration (deferred to Epic 4)
+
+    ## Acceptance Criteria (Given/When/Then)
+    - Given Shoprite scraper deployed, When scheduled workflow runs, Then 500+ SKUs ingested
+    - Given Pick n Pay scraper deployed, When workflow runs, Then CPR updated with fresh prices
+    - Given duplicate detection enabled, When re-run, Then <5% new duplicate rows
+
+    ## Approach Sketch
+    - Build Shoprite Playwright scraper following retailer playbook
+    - Build Pick n Pay scraper with auth handling
+    - Configure Temporalite workflows for both retailers
+    - Add monitoring metrics to ingestion dashboard
+
+    ## Risks & Mitigations
+    - **Risk:** Retailer blocking → **Mitigation:** Rate limiting, user-agent rotation
+    - **Risk:** Auth token expiry → **Mitigation:** Token refresh logic, alerts on failure
+
+    ## Test Plan
+    - Unit tests for scraper parsing logic
+    - Integration tests with Prisma test environment
+    - Manual verification: spot-check 10 items against live sites
+
+    ## Dependencies
+    - Story 1.1 completion (CPR schema and Checkers baseline)
+    - Temporalite scheduler configured
+    - Supabase Postgres accessible
+
+    ## Assets & Links
+    - **Epic:** Epic 1 - Data Backbone Foundations
+    - **Local Story File:** `docs/stories/1.2.shoprite-pnp-ingestion.md`
+    - **Architecture:** architecture/04-component-breakdown.md#ingestion-layer
+    - **Retailer Playbook:** docs/retailer-scraping-playbook.md
+
+    ## Estimate & Target
+    - **Size:** M
+    - **Epic:** 1
+    - **Story:** 2
+    - **Sprint:** Sprint 1, Week 2
