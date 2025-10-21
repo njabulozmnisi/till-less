@@ -191,8 +191,8 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 
 | Branch Type | Merge Into | After Merge |
 |------------|------------|-------------|
-| `feature/*` | `develop` | checkout `develop` → push (if safe) |
-| `bugfix/*` | `develop` | checkout `develop` → push (if safe) |
+| `feature/*` | `develop` | checkout `develop` → pull `develop` → push (if safe) |
+| `bugfix/*` | `develop` | checkout `develop` → pull `develop` → push (if safe) |
 | `release/*` | `main` | tag `vX.Y.Z` → back‑merge `main` → `develop` |
 | `hotfix/*` | `main` | tag → back‑merge `main` → `develop` |
 
@@ -213,6 +213,7 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 
 - **Repository updates**
   - `git checkout develop`
+  - `git pull origin develop`
   - If safe, `git push origin develop`
 
 - **Documentation**
@@ -227,6 +228,6 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 - Use the **Issue number in branch names and commits**
 - Post a **PR review as an Issue comment** before merge (no repo files)
 - Follow **Git Flow** for merges
-- After merge, **checkout `develop`** and **push only if safe**
+- After merge, **checkout `develop`**, **pull `develop`**, and **push only if safe**
 - **Do not delete branches** after merge
 - Keep work small, clear, and traceable
