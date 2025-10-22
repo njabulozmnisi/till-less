@@ -1,17 +1,21 @@
 # Project Brief: TillLess
 
 **Date:** October 2025
-**Version:** 1.0
+**Version:** 2.0 (Enhanced with Category Intelligence)
 **Status:** Active Development
 **Owner:** Product Team
+
+**Version History:**
+- v1.0 (October 2025): Initial brief focusing on basket optimization with loyalty/travel modeling
+- v2.0 (October 2025): Enhanced with category-level budget intelligence, surgical optimization, category portfolios, threshold nudges, and optimization personas based on brainstorming session insights
 
 ---
 
 ## Executive Summary
 
-**TillLess** is a personal shopping optimization platform for South African households that analyzes shopping lists across multiple retailers (Checkers, Pick n Pay, Shoprite, Woolworths, Makro) to recommend the cheapest complete basket while accounting for loyalty pricing, travel costs, and user preferences. The MVP targets budget-conscious Gauteng families doing monthly R3,000+ grocery shops, delivering ≥8% average savings (R240+ per shop) with ≤10 minutes of user effort.
+**TillLess** is a category-aware shopping optimization platform for South African households that analyzes shopping lists across multiple retailers (Checkers, Pick n Pay, Shoprite, Woolworths, Makro) to recommend the cheapest complete basket while accounting for loyalty pricing, travel costs, and user preferences. The MVP targets budget-conscious Gauteng families doing monthly R3,000+ grocery shops, delivering ≥8% average savings (R240+ per shop) with ≤10 minutes of user effort through **category-based budget intelligence** that reduces 40+ individual item decisions to 5-8 intuitive category choices.
 
-**Key Value Proposition:** Unlike item-level price checkers (PriceCheck) or single-retailer delivery apps (Checkers Sixty60), TillLess provides **transparent total cost optimization** — surfacing the absolute cheapest way to complete your monthly shop across all major stores, factoring in loyalty card benefits, travel effort, and smart substitutions.
+**Key Value Proposition:** Unlike item-level price checkers (PriceCheck) or single-retailer delivery apps (Checkers Sixty60), TillLess provides **transparent total cost optimization with category-level visibility** — surfacing the absolute cheapest way to complete your monthly shop across all major stores, factoring in loyalty card benefits, travel effort, and smart substitutions. TillLess enables **surgical optimization** (hybrid baskets where categories can be split across retailers), learns user preferences through **category portfolios** (stable shopping strategies over 3+ months), and surfaces only **threshold nudges** (R30+ savings, ≤10 min travel) to eliminate decision fatigue.
 
 **Target Market:** 4.3 million tech-comfortable South African households (25% of 17.2M total households) spending >R2,000/month on groceries, with potential TAM of R823 million based on R15.93 average monthly willingness-to-pay.
 
@@ -38,6 +42,14 @@ South African grocery shoppers face a complex, frustrating optimization problem:
    - **Retailer delivery apps** (Sixty60, asap!): Single-store only, can't compare across retailers
    - **Deal aggregators** (Cataloguespecials): Passive browsing, no shopping list integration
    - **None account for travel costs**: Cheapest store 20km away may not be worth R180 savings
+   - **No category-level visibility**: Users can't see "Where is my money going?" — 40+ item decisions with no budget lens
+
+4. **Lack of Category-Level Budget Intelligence**
+   - Users think in categories ("produce," "meat," "pantry") not individual items
+   - No visibility into category-level spend: "Is meat 42% of my basket?"
+   - No ability to apply category-specific preferences: "Premium quality for produce, economy for cleaning"
+   - 40+ individual item decisions create cognitive overload without grouping logic
+   - Can't answer: "Which categories drive my spend?" or "Where should I focus optimization efforts?"
 
 ### Impact (Quantified)
 
@@ -52,7 +64,7 @@ South African grocery shoppers face a complex, frustrating optimization problem:
 - **Checkers Sixty60 / Pick n Pay asap!:** Optimized for speed (60-min delivery), not savings; single-retailer lock-in
 - **Basket (US):** Closest analog internationally, but crowdsourced data has cold-start problem and no SA presence; lacks loyalty program integration
 
-**Gap:** No solution optimizes complete baskets across multiple SA retailers while factoring loyalty pricing, travel costs, substitution preferences, and transparent trade-off explanations.
+**Gap:** No solution optimizes complete baskets across multiple SA retailers while factoring loyalty pricing, travel costs, substitution preferences, transparent trade-off explanations, AND category-level budget intelligence with surgical optimization capabilities.
 
 ### Urgency & Importance
 
@@ -67,21 +79,27 @@ South African grocery shoppers face a complex, frustrating optimization problem:
 
 ### Core Concept
 
-TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list into an optimized procurement plan:
+TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list into an optimized procurement plan with **category-level budget intelligence**:
 
 1. User inputs shopping list (manual entry or CSV import): items, quantities, brand preferences, substitution tolerance
-2. TillLess ingests latest retailer pricing via compliant web scraping (Playwright workers, 2-4 hour cadence)
-3. Optimization engine calculates total basket cost per retailer, applying:
+2. **Category Auto-Grouping:** TillLess automatically categorizes items into 2.5-level hierarchy (Level 1: 5-8 core categories like Produce, Meat, Pantry; Level 2: sub-buckets; Level 2.5: strategy tags like "bulk-friendly," "brand-locked")
+3. TillLess ingests latest retailer pricing via compliant web scraping (Playwright workers, 2-4 hour cadence)
+4. **Category-Aware Optimization Engine** calculates basket cost per retailer AND per category, applying:
    - Loyalty pricing (Xtra Savings, Smart Shopper, WRewards, mCard)
    - Promotions (3-for-2, bulk discounts, size-based deals)
    - Travel cost model (distance × user-configurable R/km rate + time value R/hour)
    - Substitution logic (brand flexibility, size tolerance)
-4. Results page shows:
-   - **Recommended store** with total cost breakdown (price + loyalty savings - travel cost = net total)
-   - **Item-level comparison table** across all 5 retailers (price, unit price, promo badges)
-   - **Substitution suggestions** for out-of-stock or higher-priced items
+   - **Category preferences** (quality weights 0.8-1.2, store biases, budget caps per category)
+   - **Surgical optimization** (split categories across retailers when savings > threshold)
+5. Results page shows **category-first view** ("The iPhone Moment"):
+   - **Category totals** as primary surface: "🥩 Meat — R412 (Woolies best, Checkers -R28 alt)"
+   - Tap category → drill down to item-level details
+   - **Recommended strategy** with surgical splits: "Produce + Meat at Woolies, Pantry at Checkers"
+   - **Budget visibility:** "Meat is 29% of basket (target: 22%) — rebalance suggestions available"
+   - **Threshold nudges only:** "Switch Dairy to Checkers — save R42, +0 min travel. Apply?"
    - **Trade-off transparency:** "Makro saves R180 but requires 20km travel (45min, R85 fuel) — net R95 savings"
-5. Post-shop: User uploads receipt → reconciliation → accuracy tracking → product mapping improvement (feedback loop)
+6. **Adaptive Learning (3+ months):** System detects **category portfolios** (stable patterns like "Woolies for Produce 70% of the time") and auto-applies with user approval
+7. Post-shop: User uploads receipt → reconciliation → accuracy tracking → product mapping improvement + category portfolio refinement (feedback loop)
 
 ### Key Differentiators
 
@@ -105,23 +123,55 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
    - Users upload receipts → TillLess learns actual prices → improves mapping accuracy
    - Network effects: more receipts → better product matching → more accurate recommendations
 
+6. **Category-Level Budget Intelligence** (vs. item-only views)
+   - 2.5-level category hierarchy reduces 40+ decisions to 5-8 category choices
+   - Budget visibility: "Meat is 29% of basket — rebalance to target 22%?"
+   - Category-first UI ("The iPhone Moment"): Primary view shows category totals, drill down to items on-demand
+
+7. **Surgical Optimization** (vs. single-store or all-or-nothing multi-store)
+   - Hybrid baskets: "Produce + Meat at Woolies, Pantry at Checkers" when savings > threshold
+   - Category-level splitting enables precision optimization without excessive store visits
+
+8. **Adaptive Category Portfolios** (vs. static recommendations)
+   - Learns stable patterns over 3+ months: "You choose Woolies for Produce 70% of the time"
+   - Auto-applies learned preferences, reduces cognitive load by 60-70% for repeat users
+
+9. **Threshold Nudges Only** (vs. notification overload)
+   - Only surfaces changes worth making: R30+ savings AND ≤10 min travel
+   - Eliminates decision fatigue: "Switch Dairy to Checkers — save R42, +0 min. Apply?"
+
+10. **Optimization Personas** (vs. one-size-fits-all or configuration hell)
+    - 4 modes: Thrifty (max savings), Balanced (quality-price), Premium Fresh (quality-first for fresh), Time Saver (single-store)
+    - Personalization without 20 settings sliders
+
 ### Why This Will Succeed
 
 1. **Proven Model Internationally:** Basket (US) validates whole-basket optimization with 20% average user savings and 165K store coverage
-2. **Unmet SA Market Need:** Brainstorming + market research confirmed no existing solution addresses monthly bulk shopping optimization
-3. **Technical Feasibility:** Playwright scraping + NestJS optimization engine + Supabase Postgres proven in Phase 0 prototyping
-4. **Differentiation Window:** Troli has first-mover advantage but lacks loyalty/travel modeling — 6-12 month window to capture power users
-5. **Monetization Path:** Freemium (free MVP) → subscription (premium features like multi-store routing, meal planning) → B2B data licensing (anonymized pricing trends to CPG brands)
+2. **Unmet SA Market Need:** Brainstorming + market research confirmed no existing solution addresses monthly bulk shopping optimization WITH category-level budget intelligence
+3. **Technical Feasibility:** Playwright scraping + NestJS optimization engine + Supabase Postgres proven in Phase 0 prototyping; category grouping and surgical optimization are algorithmically tractable
+4. **Differentiation Window:** Troli has first-mover advantage but lacks loyalty/travel modeling AND category intelligence — 6-12 month window to capture power users with superior UX ("The iPhone Moment")
+5. **Cognitive Load Reduction:** Category-first approach mirrors how humans actually budget and shop (5-8 buckets vs. 40+ items), creating 10× faster decision-making
+6. **Monetization Path:** Freemium (free MVP) → subscription (premium features like multi-store routing, meal planning) → B2B data licensing (anonymized pricing trends to CPG brands)
 
 ### High-Level Vision
 
-**Phase 1 (MVP - 3 months):** Single-store basket optimization with loyalty/travel modeling for 5 retailers (Checkers, PnP, Shoprite, Woolworths, Makro)
+**Phase 1 (MVP - 3 months):**
+- Single-store basket optimization with loyalty/travel modeling for 5 retailers (Checkers, PnP, Shoprite, Woolworths, Makro)
+- **Category intelligence foundations:** 2.5-level hierarchy, category-first UI ("The iPhone Moment"), optimization personas, threshold nudges
+- Budget visibility at category level
 
-**Phase 1.5 (6 months):** Receipt OCR, price alerts, Food Lover's Market integration, multi-store route optimization
+**Phase 1.5 (6 months):**
+- Receipt OCR, price alerts, Food Lover's Market integration
+- **Surgical optimization:** Multi-store category splits when savings > threshold
+- **Category portfolios:** Adaptive learning (3+ months pattern detection, auto-apply with approval)
 
-**Phase 2 (12 months):** Meal planning integration (recipe → ingredient list → optimized shopping), pantry management, predictive restocking
+**Phase 2 (12 months):**
+- Meal planning integration (recipe → ingredient list → optimized shopping)
+- **Advanced category features:** Category budgets with household member assignments, spend rebalancing, zero-based category planning
+- Pantry management, predictive restocking
+- **Category optimization × travel route:** Commute-aware category splits
 
-**Long-term Vision:** "Household Food & Budget Concierge" — AI-powered monthly food planning that optimizes nutrition, budget, and preferences; eliminates food planning cognitive load entirely
+**Long-term Vision:** "Household Food & Budget Concierge" — AI-powered monthly food planning that optimizes nutrition, budget, and preferences with category-level intelligence as the data spine; eliminates food planning cognitive load entirely while enabling horizontal expansion (financial sync, nutrition tracking, sustainability scoring)
 
 ---
 
@@ -224,6 +274,22 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
   - CSV import (standard template: "Item, Qty, Size, Brand Lock, Substitution Tolerance")
   - Save/reuse past lists (clone last month's list with edits)
 
+- **Category Intelligence Foundations**
+  - **2.5-Level Category Hierarchy:** Auto-categorize items into Level 1 (5-8 core categories: Produce, Meat, Dairy, Pantry, Frozen, Household, etc.), Level 2 (sub-buckets, optional), Level 2.5 (strategy tags: bulk-friendly, brand-locked, nutrition-critical)
+  - **Category-First UI ("The iPhone Moment"):** Primary results view shows category totals ("🥩 Meat — R412 (Woolies best, Checkers -R28 alt)"), drill down to item-level on-demand
+  - **Budget Visibility:** Show category spend percentages ("Meat is 29% of basket")
+  - **User Category Overrides:** Allow users to manually recategorize items or adjust category hierarchy
+
+- **Optimization Personas**
+  - **4 Modes:** Thrifty (maximize savings, accept multi-store), Balanced (quality-price trade-off, 1-2 stores), Premium Fresh (quality-first for fresh categories), Time Saver (single-store only)
+  - **Onboarding Flow:** User selects persona, system applies corresponding optimization weights
+  - **Persona-Specific Results:** "As a Balanced user, recommended strategy is..."
+
+- **Threshold Nudges**
+  - **Nudge Logic:** Only surface alternative recommendations if savings ≥ R30 AND travel time ≤ 10 min
+  - **Nudge UI:** "Switch Dairy to Checkers — save R42, +0 min travel. Apply?"
+  - **User-Adjustable Thresholds:** Settings allow customization (R20-R50 range, 5-15 min range)
+
 - **Multi-Retailer Price Ingestion**
   - Web scrapers (Playwright workers) for Checkers, Pick n Pay, Shoprite, Woolworths, Makro
   - Cadence scheduling (Temporalite orchestration: 2-4 hour refresh for staples, higher frequency during promo weeks)
@@ -258,6 +324,7 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
   - Home location (for distance calculation)
   - Effort tolerance: max stores willing to visit (default 1), max distance (default 10km)
   - Time value setting (R/hour equivalent for travel time, default R100/hour)
+  - **Category Preferences:** Per-category quality weights (0.8-1.2 multiplier), store biases, budget caps (optional), substitution tolerance
 
 ### Out of Scope for MVP
 
@@ -265,7 +332,11 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
 - **Receipt OCR Automation:** Phase 1.5 feature (MVP requires manual receipt entry)
 - **Real-Time Stock Verification:** No live stock APIs; rely on "last scraped" data + user feedback
 - **Meal Planning Integration:** Phase 2 (recipe → shopping list generation)
-- **Multi-Store Route Optimization:** Phase 1.5 (currently recommend single best store; multi-store splitting later)
+- **Surgical Optimization / Multi-Store Category Splits:** Phase 1.5 (MVP recommends single best store; category-level multi-store splitting comes later)
+- **Category Portfolios (Adaptive Learning):** Phase 1.5 (requires 3+ months user behavior data, pattern detection algorithm)
+- **Category Budgets with Household Assignments:** Phase 2 ("Dad owns meat budget" multi-user feature)
+- **Category Spend Rebalancing / Zero-Based Planning:** Phase 2 (requires historical spend analytics)
+- **Optimization Streaks & Visual Feedback:** Phase 2 gamification features
 - **Native Delivery Integration:** Planning-only MVP (no Uber Direct/Mr D fulfillment)
 - **Pantry Management / Consumption Tracking:** Phase 2 features
 - **Social Features (Shared Lists, Family Accounts):** Phase 2
@@ -276,52 +347,108 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
 **MVP is successful if:**
 1. **500 active users** (Gauteng) within 3 months post-launch
 2. **≥8% average savings** demonstrated (validated via receipt reconciliation)
-3. **≥95% product matching accuracy** (≤5% manual override rate)
+3. **≥95% product matching AND categorization accuracy** (≤5% manual override rate for products and categories)
 4. **≤30 second optimization runtime** for 60-item lists
 5. **≥70% recommendation acceptance rate** (users shop at TillLess-recommended store)
-6. **NPS ≥40** (early trust signals vs. competitors)
+6. **≥60% of users engage with category-first UI** (drill down to items < 40% of the time, indicating category view sufficiency)
+7. **≥50% of users select an optimization persona** within first 3 uses (validates persona value)
+8. **≥35% threshold nudge acceptance rate** (users apply suggested category switches when nudged)
+9. **NPS ≥40** (early trust signals vs. competitors)
 
 **Key Validation Questions Answered:**
 - Does whole-basket optimization deliver meaningful savings (>R200/month)?
 - Can web scraping provide reliable, fresh data (95% uptime)?
 - Do users trust and act on recommendations (acceptance rate >70%)?
 - Is loyalty pricing integration a differentiator (vs. Troli's unknown approach)?
+- **Does category-first UI reduce cognitive load and improve user experience vs. item-only views?**
+- **Do optimization personas provide meaningful personalization without configuration complexity?**
+- **Do threshold nudges eliminate decision fatigue while maintaining engagement?**
 
 ---
 
 ## Post-MVP Vision
 
-### Phase 2 Features (Months 6-12)
+### Phase 1.5 Features (Months 4-6)
 
 **Receipt OCR Pipeline**
 - Automate receipt uploads (photo → structured data via Google Cloud Vision / Mindee)
-- Passive crowdsourcing (like Basket): user receipts improve product mapping for all users
+- Passive crowdsourcing (like Basket): user receipts improve product mapping AND category portfolio detection for all users
 - Accelerates feedback loop (from manual entry to automated variance tracking)
 
-**Price Alerts & Notifications**
-- Push notifications when favorited items drop in price ("Nescafe 200g now R69 at Woolworths — 22% off!")
-- Promo expiry warnings ("Xtra Savings deal ends tomorrow — shop now to save R85")
-- Habit-forming feature (matches Troli's price alerts)
-
-**Multi-Store Route Optimization**
+**Surgical Optimization / Multi-Store Category Splits**
 - For users willing to visit 2-3 stores for maximum savings (>R300)
-- Calculate optimal route: "Buy staples at Makro (R1,200), fresh produce at Woolworths (R650) — total R1,850 vs. R2,100 single-store"
+- Calculate optimal category-level splits: "Produce + Meat at Woolies (R1,062), Pantry + Household at Checkers (R788) — total R1,850 vs. R2,100 single-store"
 - Google Maps integration for turn-by-turn routing
+- **Key Differentiator:** Category-level precision vs. all-or-nothing multi-store
+
+**Category Portfolios (Adaptive Learning)**
+- Pattern detection algorithm: Analyze 3+ months user behavior, detect stable category-retailer patterns (win rate ≥70%, volatility ≤0.3)
+- Auto-suggest portfolios: "You consistently choose Woolies for Produce and Meat. Make this your default?"
+- One-tap adoption with manual override option
+- Portfolio refinement via receipt reconciliation
+- **Impact:** Reduces cognitive load by 60-70% for repeat users
 
 **Food Lover's Market Integration**
 - Expand retailer coverage to 6 (add Food Lover's Market where available)
 - Specialty produce pricing often beats major chains
 
+### Phase 2 Features (Months 7-12)
+
+**Price Alerts & Notifications**
+- Push notifications when favorited items OR categories drop in price ("Meat category down 18% this week at Checkers!")
+- Promo expiry warnings ("Xtra Savings deal on Pantry ends tomorrow — shop now to save R85")
+- **Category-aware alerts:** "Your typical Produce spend is R380; this week Shoprite offers R312 (-18%)"
+
+**Category Budgets with Household Member Assignments**
+- Multi-user household accounts
+- Assign category ownership: "Dad owns Meat budget (R450/month), Mom owns Produce budget (R380/month)"
+- Weekly scoreboard: "Dad saved R48 by choosing Checkers Meat. Mom went over Produce by R29 at Woolies."
+- Gamification through accountability and collaboration
+
+**Category Spend Rebalancing**
+- Target allocation system: "Your target for Meat is 22% of spend, but you're at 29% this quarter"
+- Rebalancing recommendations: "Two swaps could rebalance and save ~R110/month"
+- Inspired by stock portfolio rebalancing (high intelligence, low UX complexity)
+
+**Zero-Based Category Planning**
+- Monthly spend drift detection: "Your Pantry spend crept up 11%"
+- Swap recommendations: "Reduce by R80 with these swaps or bulk moves?"
+- Prevents budget bloat through monthly reset ritual
+
+**Optimization Streaks & Visual Feedback**
+- Category-level streaks: "🏆 7-week Fresh Produce streak! You've saved R482 over this period"
+- Trend graphs per category (spend over time, savings over time)
+- Green/yellow/red budget states per category
+- **Emotional streak protection:** Creates habit formation without childish gamification
+
+**Quarterly/Yearly Portfolio Reports**
+- Long-term analytics: "YTD Pantry Spend: R7,812 (down 9% vs last year)"
+- Annual trends: "Annual Meat Trend: +13% — want new strategy recs?"
+- Users remember "We saved R2,600 this year" not individual R12 discounts
+
+**Category Optimization × Travel Route**
+- Commute-aware optimization: "Your commute passes Checkers and Woolies — optimize Meat + Produce at no extra travel time"
+- Uses real-world behavior (location permissions) to refine category strategy
+
 ### Long-Term Vision (1-2 Years)
 
 **"Household Food & Budget Concierge"**
-- AI-powered meal planning: "Pick 20 dinners, 5 breakfasts, 3 snacks → TillLess generates ingredient list → optimizes sourcing across retailers"
-- Nutrition awareness: "This meal plan meets 90% of daily iron, 85% calcium; suggest iron-rich substitutes?"
-- Budget guardrails: "R3,000 budget set; current plan R3,200 — here are 5 swaps to fit budget"
-- Pantry integration: "You have 2kg rice at home; reducing rice quantity in this month's list"
-- Consumption prediction: "You typically consume 2L milk every 5 days; suggest restocking in 3 days"
+- AI-powered meal planning: "Pick 20 dinners, 5 breakfasts, 3 snacks → TillLess generates ingredient list → **categorizes automatically** → optimizes sourcing across retailers"
+- Nutrition awareness: "This meal plan meets 90% of daily iron, 85% calcium; **Meat category provides 65% of protein** — suggest iron-rich substitutes?"
+- Budget guardrails: "R3,000 budget set; current plan R3,200 — **Pantry category +R150, Snacks category +R80** — here are 5 swaps to fit budget"
+- Pantry integration: "You have **Pantry category items** at home worth R340; reducing quantities in this month's list"
+- Consumption prediction: "You typically consume **Dairy category items every 4.2 days**; suggest restocking in 3 days"
 
-**Transformation:** From "price calculator" → "household food CFO + meal assistant" — comprehensive monthly food planning eliminating all decision fatigue
+**Category System as Data Spine:**
+The category system unlocks horizontal expansion without product bloat:
+- **Financial Export/Budget Sync:** Auto-sync category spend to YNAB/22Seven, envelope budgets from actual patterns
+- **Nutrition & Wellness:** Protein tracking by category, nutrition goals tied to meal plans ("Meat + Dairy categories provide 85g protein/day")
+- **Sustainability Scoring:** Lower-carbon swaps per category, ESG ratings ("Produce category carbon footprint: 12kg CO2/month")
+- **Pantry Auto-Replenishment:** Auto-generate refill basket every 30/45 days per category, one-tap approval
+- **B2B Retailer Insights:** "Woolies losing Produce share to Checkers in Johannesburg East"
+- **B2B Brand Analytics:** "PnP deodorant sales spike when promos align with Household category cycles"
+
+**Transformation:** From "price calculator" → "household food CFO + meal assistant + financial planner" — comprehensive monthly food planning eliminating all decision fatigue, powered by category-level intelligence
 
 ### Expansion Opportunities
 
@@ -370,8 +497,57 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
 
 **Database:**
 - **Primary DB:** Supabase Postgres (free tier: 500MB storage, 2GB bandwidth/month)
-- **Schema:** Canonical Product Registry (extended with loyalty pricing, per-weight fields)
-- **Caching:** Redis (Upstash free tier: 10,000 commands/day) for product lookups, optimization results
+- **Schema Highlights:**
+  - **Canonical Product Registry** (extended with loyalty pricing, per-weight fields)
+  - **Category System Tables:**
+    ```sql
+    categories (
+      id UUID PRIMARY KEY,
+      name VARCHAR NOT NULL,
+      parent_id UUID REFERENCES categories(id), -- for 2.5-level hierarchy
+      icon VARCHAR,
+      display_order INT,
+      is_system_default BOOLEAN DEFAULT true
+    )
+
+    category_preferences (
+      id UUID PRIMARY KEY,
+      user_id UUID REFERENCES users(id),
+      category_id UUID REFERENCES categories(id),
+      quality_weight DECIMAL(3,2) DEFAULT 1.0, -- 0.8-1.2 multiplier
+      unit_price_ceiling DECIMAL(10,2), -- max R/kg, R/L, etc.
+      store_bias JSONB, -- {"woolworths": 1.1, "checkers": 0.9}
+      substitution_tolerance VARCHAR CHECK (substitution_tolerance IN ('low', 'medium', 'high')),
+      budget_cap DECIMAL(10,2),
+      bulk_preference BOOLEAN DEFAULT false
+    )
+
+    item_category_mappings (
+      item_id UUID REFERENCES items(id),
+      category_id UUID REFERENCES categories(id),
+      confidence_score DECIMAL(3,2), -- ML-assigned confidence
+      is_user_override BOOLEAN DEFAULT false
+    )
+
+    item_tags (
+      item_id UUID REFERENCES items(id),
+      tag VARCHAR, -- 'bulk-friendly', 'brand-locked', 'nutrition-critical'
+      created_at TIMESTAMP DEFAULT NOW()
+    )
+
+    category_portfolios (
+      id UUID PRIMARY KEY,
+      user_id UUID REFERENCES users(id),
+      category_id UUID REFERENCES categories(id),
+      preferred_retailer_id UUID REFERENCES retailers(id),
+      win_rate DECIMAL(5,2), -- % of time this retailer wins (≥70% threshold)
+      avg_savings DECIMAL(10,2),
+      volatility_score DECIMAL(3,2), -- how often it flips (≤0.3 threshold)
+      detected_at TIMESTAMP,
+      user_adopted BOOLEAN DEFAULT false
+    )
+    ```
+- **Caching:** Redis (Upstash free tier: 10,000 commands/day) for product lookups, optimization results, category aggregations
 
 **Hosting/Infrastructure:**
 - **Frontend:** Vercel (Next.js optimized, free hobby tier, global CDN)
@@ -389,8 +565,12 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
 **Service Architecture:**
 - **API Layer:** NestJS REST/GraphQL (unified endpoint for frontend, supports future mobile apps)
 - **Optimization Engine:** Isolated service (called by API, modular for algorithm iteration)
+  - **Category-Aware Logic:** Per-category optimization with quality weights, store biases, budget caps
+  - **Persona Application:** Apply Thrifty/Balanced/Premium Fresh/Time Saver weights per category
+  - **Threshold Nudge Generation:** Only surface alternatives with savings ≥ R30 AND travel ≤ 10 min
 - **Scraping Workers:** Playwright Docker containers (scheduled by Temporalite, push results to pg-boss queue)
-- **Normalization Workers:** Consume pg-boss queue, match products to Canonical Product Registry, store results
+- **Normalization Workers:** Consume pg-boss queue, match products to Canonical Product Registry, **auto-categorize items**, store results
+- **Category Portfolio Detection (Phase 1.5):** Background job analyzing 3+ months user behavior, detecting stable patterns (win rate ≥70%, volatility ≤0.3)
 
 **Integration Requirements:**
 - **Google Maps API (or OSRM):** Distance/time calculation (budget: OSRM self-hosted free, Maps API $200/month credit)
@@ -485,6 +665,11 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
 - **Geographic Pricing Variations:** Do Checkers prices in Sandton differ from Soweto? (Impacts scraper geo-targeting and accuracy)
 - **GTIN Coverage in SA:** What % of products have accessible GTINs (barcodes) for exact matching? (Pilot with select categories to assess)
 - **Receipt Reconciliation Incentives:** Will users voluntarily upload receipts (40% target)? Or need rewards (R5 Uber voucher per receipt)? (Test in pilot)
+- **Category Hierarchy Depth:** Is 2.5-level hierarchy optimal (5-8 Level 1, sub-buckets, strategy tags), or do users need more/less granularity?
+- **Category Auto-Classification Accuracy:** Can heuristics (product name keywords, taxonomy matching) achieve 95%+ auto-categorization accuracy, or is ML required?
+- **Persona Adoption:** Will 50%+ of users select a persona within 3 uses, or will they ignore it as "configuration noise"?
+- **Threshold Nudge Sweet Spot:** Is R30 the right threshold, or should it be R20/R50? What about travel time (10 min vs. 5/15 min)?
+- **Category-First UI Validation:** Will users embrace category totals as primary view ("The iPhone Moment"), or demand item-level details upfront?
 
 ### Areas Needing Further Research
 
@@ -559,27 +744,38 @@ TillLess is a **"Monthly Shopping CFO"** that transforms a user's shopping list 
    - Configure Supabase project (Postgres DB, authentication schema, storage buckets)
    - Deploy Temporalite locally (Docker Compose for scraping orchestration)
 
-2. **Implement Data Backbone** (Weeks 1-3, Epic 1)
+2. **Implement Data Backbone + Category Foundations** (Weeks 1-3, Epic 1)
    - Migrate Canonical Product Registry schema to Supabase (Prisma migrations)
+   - **Implement category system tables:** categories, category_preferences, item_category_mappings, item_tags, category_portfolios (schema from brainstorming session)
+   - **Seed default category hierarchy:** 5-8 Level 1 categories (Produce, Meat, Dairy, Pantry, Frozen, Household, etc.)
    - Build Playwright scrapers for Checkers, Pick n Pay (start with 2 retailers, add Shoprite/Woolworths/Makro incrementally)
-   - Set up pg-boss ingestion queue + normalization workers
+   - Set up pg-boss ingestion queue + normalization workers (include auto-categorization logic)
    - Create ingestion monitoring dashboard (Grafana or simple Next.js admin panel)
 
-3. **Build Optimization Engine** (Weeks 4-6, Epic 2)
+3. **Build Category-Aware Optimization Engine** (Weeks 4-6, Epic 2)
    - Implement basket cost calculation (price + loyalty + promotions + travel)
+   - **Category-aware optimization logic:** Per-category calculations with quality weights, store biases, budget caps
+   - **Optimization personas:** Thrifty, Balanced, Premium Fresh, Time Saver weight application
+   - **Threshold nudge generation:** Filter alternatives (savings ≥ R30 AND travel ≤ 10 min)
    - Develop substitution logic (brand flexibility, size tolerance)
    - Expose REST/GraphQL API endpoints (NestJS)
-   - Write integration tests (mock retailer data, validate cost calculations)
+   - Write integration tests (mock retailer data, validate cost calculations, test persona logic)
 
-4. **Develop Frontend UI** (Weeks 4-6, Epic 3)
-   - Shopping list input form (Next.js, React Hook Form, CSV import)
-   - User preferences page (loyalty cards, home location, effort tolerance)
-   - Optimization results dashboard (item comparison table, recommendations, trade-offs)
-   - Export functionality (PDF generation, email summary)
+4. **Develop Category-First Frontend UI** (Weeks 4-6, Epic 3)
+   - Shopping list input form (Next.js, React Hook Form, CSV import) with auto-categorization
+   - **Onboarding flow:** Persona selection (Thrifty, Balanced, Premium Fresh, Time Saver)
+   - User preferences page (loyalty cards, home location, effort tolerance, **category preferences**)
+   - **Optimization results dashboard ("The iPhone Moment"):**
+     - **Primary view:** Category totals ("🥩 Meat — R412 (Woolies best, Checkers -R28 alt)")
+     - Drill-down to item-level details on-demand
+     - **Budget visibility:** Category spend percentages
+     - **Threshold nudges:** "Switch Dairy to Checkers — save R42, +0 min. Apply?"
+   - Export functionality (PDF summary, email summary)
 
 5. **Launch Closed Beta Pilot** (Week 9)
    - Recruit 20 Gauteng households (friends, family, Reddit r/PersonalFinanceZA)
-   - Onboard users, gather feedback (usability, accuracy, savings validation)
+   - Onboard users, gather feedback (usability, accuracy, savings validation, **category UI validation**, **persona adoption**, **threshold nudge acceptance**)
+   - **Track category-specific metrics:** Auto-categorization accuracy, category-first UI engagement, persona selection rate
    - Iterate based on pilot findings (Weeks 10-11)
 
 6. **Public MVP Launch** (Month 4)
@@ -598,13 +794,20 @@ This Project Brief provides the full context for **TillLess**. The next phase is
 4. Define Epic breakdowns and story point estimates for 9-week sprint plan
 
 **Key Questions for PRD Development:**
-- Detailed user flows for each persona (Thandi, Bongani) — step-by-step journey maps
-- Edge case handling (What if all 5 retailers are out of stock for a must-have item? How to handle?)
-- API contracts (REST vs. GraphQL for optimization endpoint? Request/response schema?)
-- Acceptance criteria for each Epic (How do we validate Epic 2 Optimization Engine is "done"?)
+- Detailed user flows for each persona (Thandi, Bongani) — step-by-step journey maps with persona selection
+- **Category-specific user flows:** How does onboarding guide users through category preferences? How does category-first UI drill-down work?
+- Edge case handling (What if all 5 retailers are out of stock for a must-have item? What if auto-categorization fails for 10%+ of items?)
+- API contracts (REST vs. GraphQL for optimization endpoint? Request/response schema for category-aware optimization?)
+- **Category data model validation:** Review proposed schema (categories, category_preferences, item_category_mappings, category_portfolios) — any gaps?
+- Acceptance criteria for each Epic (How do we validate Epic 2 Category-Aware Optimization Engine is "done"? What metrics prove category-first UI success?)
 
-Let's collaborate to turn this brief into a bulletproof PRD and ship the MVP in 9 weeks! 🚀
+**Key Artifacts Referenced:**
+- **Brainstorming Session Results:** `docs/brainstorming-session-results.md` (120+ ideas across foundational features and category enhancements — primary source for v2.0 enhancements)
+- Existing PRD (if available): `docs/prd.md` (to be updated with category intelligence features)
+- Architecture Design: `docs/ARCHITECTURE.md` (DDD-based structure, to be updated with category domain model)
+
+Let's collaborate to turn this brief into a bulletproof PRD and ship the category-aware MVP in 9 weeks! 🚀
 
 ---
 
-*Project Brief created using BMAD™ Framework | Version 1.0 | October 2025*
+*Project Brief created using BMAD™ Framework | Version 2.0 (Category Intelligence Enhancement) | October 2025*
