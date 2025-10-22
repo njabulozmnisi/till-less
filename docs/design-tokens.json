@@ -1,0 +1,613 @@
+{
+  "$schema": "https://design-tokens.github.io/community-group/format.json",
+  "version": "1.0",
+  "project": "TillLess MVP",
+  "description": "Design tokens for TillLess UI - OKLCH color space with HEX approximations for Figma compatibility",
+  "colors": {
+    "primary": {
+      "default": {
+        "value": "#2DB779",
+        "oklch": "oklch(65% 0.15 145)",
+        "type": "color",
+        "description": "Fresh Green - Primary CTAs, savings indicators, active states"
+      },
+      "hover": {
+        "value": "#25A168",
+        "oklch": "oklch(60% 0.15 145)",
+        "type": "color"
+      },
+      "light": {
+        "value": "#E8F7F0",
+        "oklch": "oklch(95% 0.05 145)",
+        "type": "color",
+        "description": "Background tints, subtle highlights"
+      },
+      "foreground": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color",
+        "description": "Text on primary backgrounds"
+      }
+    },
+    "secondary": {
+      "default": {
+        "value": "#2B7A8E",
+        "oklch": "oklch(55% 0.12 200)",
+        "type": "color",
+        "description": "Deep Teal - Trust, intelligence, data visualizations"
+      },
+      "hover": {
+        "value": "#236671",
+        "oklch": "oklch(50% 0.12 200)",
+        "type": "color"
+      },
+      "light": {
+        "value": "#E8F4F6",
+        "oklch": "oklch(95% 0.04 200)",
+        "type": "color"
+      },
+      "foreground": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color"
+      }
+    },
+    "accent": {
+      "default": {
+        "value": "#E89D3C",
+        "oklch": "oklch(70% 0.15 55)",
+        "type": "color",
+        "description": "Warm Amber - Nudges, opportunities, notifications"
+      },
+      "hover": {
+        "value": "#D18A2E",
+        "oklch": "oklch(65% 0.15 55)",
+        "type": "color"
+      },
+      "light": {
+        "value": "#FDF5EA",
+        "oklch": "oklch(95% 0.05 55)",
+        "type": "color"
+      },
+      "foreground": {
+        "value": "#262626",
+        "oklch": "oklch(15% 0 0)",
+        "type": "color",
+        "description": "Dark text on accent backgrounds"
+      }
+    },
+    "semantic": {
+      "success": {
+        "value": "#2DB779",
+        "oklch": "oklch(65% 0.15 145)",
+        "type": "color",
+        "description": "Same as primary - confirmations, positive feedback"
+      },
+      "warning": {
+        "value": "#E89D3C",
+        "oklch": "oklch(70% 0.15 55)",
+        "type": "color",
+        "description": "Same as accent - cautions, data staleness"
+      },
+      "error": {
+        "value": "#E85D4C",
+        "oklch": "oklch(60% 0.20 25)",
+        "type": "color",
+        "description": "Warm red - errors, destructive actions"
+      },
+      "info": {
+        "value": "#4A90E2",
+        "oklch": "oklch(65% 0.15 240)",
+        "type": "color",
+        "description": "Cool blue - informational messages"
+      }
+    },
+    "neutral": {
+      "background": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color",
+        "description": "Page background"
+      },
+      "foreground": {
+        "value": "#262626",
+        "oklch": "oklch(15% 0 0)",
+        "type": "color",
+        "description": "Body text, headings"
+      },
+      "muted": {
+        "value": "#F5F5F5",
+        "oklch": "oklch(96% 0 0)",
+        "type": "color",
+        "description": "Subtle backgrounds, disabled states"
+      },
+      "mutedForeground": {
+        "value": "#808080",
+        "oklch": "oklch(50% 0 0)",
+        "type": "color",
+        "description": "Secondary text, placeholders"
+      },
+      "border": {
+        "value": "#E6E6E6",
+        "oklch": "oklch(90% 0 0)",
+        "type": "color",
+        "description": "Borders, dividers"
+      },
+      "input": {
+        "value": "#E6E6E6",
+        "oklch": "oklch(90% 0 0)",
+        "type": "color",
+        "description": "Input borders"
+      },
+      "ring": {
+        "value": "#2DB779",
+        "oklch": "oklch(65% 0.15 145)",
+        "type": "color",
+        "description": "Focus ring - same as primary"
+      }
+    },
+    "card": {
+      "background": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color"
+      },
+      "foreground": {
+        "value": "#262626",
+        "oklch": "oklch(15% 0 0)",
+        "type": "color"
+      }
+    },
+    "popover": {
+      "background": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color"
+      },
+      "foreground": {
+        "value": "#262626",
+        "oklch": "oklch(15% 0 0)",
+        "type": "color"
+      }
+    },
+    "destructive": {
+      "default": {
+        "value": "#E85D4C",
+        "oklch": "oklch(60% 0.20 25)",
+        "type": "color"
+      },
+      "foreground": {
+        "value": "#FFFFFF",
+        "oklch": "oklch(100% 0 0)",
+        "type": "color"
+      }
+    }
+  },
+  "typography": {
+    "fontFamily": {
+      "sans": {
+        "value": "Inter Variable, Inter, system-ui, -apple-system, sans-serif",
+        "type": "fontFamily",
+        "description": "Primary font for UI, headings, body text"
+      },
+      "mono": {
+        "value": "JetBrains Mono Variable, JetBrains Mono, Consolas, monospace",
+        "type": "fontFamily",
+        "description": "Monospace font for prices, numbers (tabular-nums)"
+      }
+    },
+    "fontSize": {
+      "xs": {
+        "value": "12px",
+        "rem": "0.75rem",
+        "type": "fontSize"
+      },
+      "sm": {
+        "value": "14px",
+        "rem": "0.875rem",
+        "type": "fontSize"
+      },
+      "base": {
+        "value": "16px",
+        "rem": "1rem",
+        "type": "fontSize",
+        "description": "WCAG minimum"
+      },
+      "lg": {
+        "value": "18px",
+        "rem": "1.125rem",
+        "type": "fontSize"
+      },
+      "xl": {
+        "value": "20px",
+        "rem": "1.25rem",
+        "type": "fontSize"
+      },
+      "2xl": {
+        "value": "24px",
+        "rem": "1.5rem",
+        "type": "fontSize"
+      },
+      "3xl": {
+        "value": "30px",
+        "rem": "1.875rem",
+        "type": "fontSize",
+        "description": "H1 mobile"
+      },
+      "4xl": {
+        "value": "36px",
+        "rem": "2.25rem",
+        "type": "fontSize",
+        "description": "H1 desktop"
+      },
+      "5xl": {
+        "value": "48px",
+        "rem": "3rem",
+        "type": "fontSize",
+        "description": "Hero numbers, large savings display"
+      }
+    },
+    "fontWeight": {
+      "normal": {
+        "value": "400",
+        "type": "fontWeight"
+      },
+      "medium": {
+        "value": "500",
+        "type": "fontWeight"
+      },
+      "semibold": {
+        "value": "600",
+        "type": "fontWeight"
+      },
+      "bold": {
+        "value": "700",
+        "type": "fontWeight"
+      }
+    },
+    "lineHeight": {
+      "tight": {
+        "value": "1.25",
+        "type": "lineHeight"
+      },
+      "normal": {
+        "value": "1.5",
+        "type": "lineHeight"
+      },
+      "relaxed": {
+        "value": "1.75",
+        "type": "lineHeight"
+      }
+    },
+    "textStyles": {
+      "h1": {
+        "desktop": {
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.4xl}",
+          "fontWeight": "{typography.fontWeight.bold}",
+          "lineHeight": "44px",
+          "type": "typography"
+        },
+        "mobile": {
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.3xl}",
+          "fontWeight": "{typography.fontWeight.bold}",
+          "lineHeight": "38px",
+          "type": "typography"
+        }
+      },
+      "h2": {
+        "desktop": {
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.2xl}",
+          "fontWeight": "{typography.fontWeight.semibold}",
+          "lineHeight": "32px",
+          "type": "typography"
+        },
+        "mobile": {
+          "fontFamily": "{typography.fontFamily.sans}",
+          "fontSize": "{typography.fontSize.xl}",
+          "fontWeight": "{typography.fontWeight.semibold}",
+          "lineHeight": "28px",
+          "type": "typography"
+        }
+      },
+      "h3": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.lg}",
+        "fontWeight": "{typography.fontWeight.semibold}",
+        "lineHeight": "28px",
+        "type": "typography"
+      },
+      "body": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.base}",
+        "fontWeight": "{typography.fontWeight.normal}",
+        "lineHeight": "24px",
+        "type": "typography"
+      },
+      "bodyBold": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.base}",
+        "fontWeight": "{typography.fontWeight.semibold}",
+        "lineHeight": "24px",
+        "type": "typography"
+      },
+      "small": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.sm}",
+        "fontWeight": "{typography.fontWeight.normal}",
+        "lineHeight": "20px",
+        "type": "typography"
+      },
+      "tiny": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.xs}",
+        "fontWeight": "{typography.fontWeight.normal}",
+        "lineHeight": "16px",
+        "type": "typography"
+      },
+      "button": {
+        "fontFamily": "{typography.fontFamily.sans}",
+        "fontSize": "{typography.fontSize.sm}",
+        "fontWeight": "{typography.fontWeight.medium}",
+        "lineHeight": "20px",
+        "type": "typography"
+      },
+      "price": {
+        "fontFamily": "{typography.fontFamily.mono}",
+        "fontSize": "{typography.fontSize.base}",
+        "fontWeight": "{typography.fontWeight.semibold}",
+        "lineHeight": "auto",
+        "letterSpacing": "0",
+        "fontFeatureSettings": "tnum",
+        "type": "typography",
+        "description": "Tabular numbers for price alignment"
+      },
+      "priceLarge": {
+        "fontFamily": "{typography.fontFamily.mono}",
+        "fontSize": "{typography.fontSize.5xl}",
+        "fontWeight": "{typography.fontWeight.bold}",
+        "lineHeight": "auto",
+        "fontFeatureSettings": "tnum",
+        "type": "typography",
+        "description": "Large savings display"
+      }
+    }
+  },
+  "spacing": {
+    "1": {
+      "value": "4px",
+      "rem": "0.25rem",
+      "type": "spacing"
+    },
+    "2": {
+      "value": "8px",
+      "rem": "0.5rem",
+      "type": "spacing"
+    },
+    "3": {
+      "value": "12px",
+      "rem": "0.75rem",
+      "type": "spacing"
+    },
+    "4": {
+      "value": "16px",
+      "rem": "1rem",
+      "type": "spacing",
+      "description": "Most common spacing"
+    },
+    "6": {
+      "value": "24px",
+      "rem": "1.5rem",
+      "type": "spacing"
+    },
+    "8": {
+      "value": "32px",
+      "rem": "2rem",
+      "type": "spacing"
+    },
+    "12": {
+      "value": "48px",
+      "rem": "3rem",
+      "type": "spacing"
+    },
+    "16": {
+      "value": "64px",
+      "rem": "4rem",
+      "type": "spacing"
+    }
+  },
+  "borderRadius": {
+    "sm": {
+      "value": "4px",
+      "type": "borderRadius"
+    },
+    "md": {
+      "value": "6px",
+      "type": "borderRadius",
+      "description": "Default for inputs, buttons"
+    },
+    "lg": {
+      "value": "8px",
+      "type": "borderRadius",
+      "description": "Default for cards"
+    },
+    "xl": {
+      "value": "12px",
+      "type": "borderRadius",
+      "description": "Dialogs, modals"
+    },
+    "full": {
+      "value": "9999px",
+      "type": "borderRadius",
+      "description": "Pills, badges, avatars"
+    }
+  },
+  "shadows": {
+    "small": {
+      "value": "0px 1px 3px 0px rgba(0, 0, 0, 0.1)",
+      "type": "boxShadow",
+      "description": "Subtle elevation"
+    },
+    "medium": {
+      "value": "0px 4px 6px -1px rgba(0, 0, 0, 0.1)",
+      "type": "boxShadow",
+      "description": "Card hover state"
+    },
+    "large": {
+      "value": "0px 10px 15px -3px rgba(0, 0, 0, 0.15)",
+      "type": "boxShadow",
+      "description": "Modals, dialogs, FAB"
+    },
+    "focusRing": {
+      "value": "0px 0px 0px 2px #2DB779",
+      "type": "boxShadow",
+      "description": "Keyboard focus indicator"
+    }
+  },
+  "breakpoints": {
+    "mobile": {
+      "value": "375px",
+      "type": "dimension",
+      "description": "Mobile small (iPhone SE)"
+    },
+    "mobileLarge": {
+      "value": "428px",
+      "type": "dimension",
+      "description": "Mobile large (iPhone 14 Pro Max)"
+    },
+    "tablet": {
+      "value": "768px",
+      "type": "dimension",
+      "description": "Tablet (iPad portrait)"
+    },
+    "desktop": {
+      "value": "1024px",
+      "type": "dimension",
+      "description": "Desktop minimum"
+    },
+    "desktopLarge": {
+      "value": "1440px",
+      "type": "dimension",
+      "description": "Desktop preferred"
+    },
+    "desktopXL": {
+      "value": "1920px",
+      "type": "dimension",
+      "description": "Desktop extra large"
+    }
+  },
+  "sizing": {
+    "button": {
+      "sm": {
+        "height": "36px",
+        "paddingX": "12px",
+        "type": "dimension"
+      },
+      "default": {
+        "height": "40px",
+        "paddingX": "16px",
+        "type": "dimension"
+      },
+      "lg": {
+        "height": "44px",
+        "paddingX": "20px",
+        "type": "dimension",
+        "description": "WCAG AA minimum touch target"
+      },
+      "icon": {
+        "size": "40px",
+        "type": "dimension",
+        "description": "Square button for icons only"
+      }
+    },
+    "input": {
+      "height": "40px",
+      "paddingX": "12px",
+      "type": "dimension"
+    },
+    "touchTarget": {
+      "minimum": "44px",
+      "type": "dimension",
+      "description": "WCAG AA minimum touch target (mobile)"
+    }
+  },
+  "animations": {
+    "duration": {
+      "fast": {
+        "value": "150ms",
+        "type": "duration"
+      },
+      "normal": {
+        "value": "200ms",
+        "type": "duration"
+      },
+      "slow": {
+        "value": "300ms",
+        "type": "duration"
+      },
+      "savingsCounter": {
+        "value": "1000ms",
+        "type": "duration",
+        "description": "Number count-up animation"
+      }
+    },
+    "easing": {
+      "easeOut": {
+        "value": "cubic-bezier(0, 0, 0.2, 1)",
+        "type": "cubicBezier",
+        "description": "Default for most transitions"
+      },
+      "easeIn": {
+        "value": "cubic-bezier(0.4, 0, 1, 1)",
+        "type": "cubicBezier"
+      },
+      "easeInOut": {
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "type": "cubicBezier"
+      },
+      "linear": {
+        "value": "cubic-bezier(0, 0, 1, 1)",
+        "type": "cubicBezier",
+        "description": "For spinners and continuous animations"
+      }
+    }
+  },
+  "accessibility": {
+    "contrast": {
+      "aa": {
+        "normal": {
+          "value": "4.5:1",
+          "description": "WCAG AA minimum for normal text"
+        },
+        "large": {
+          "value": "3:1",
+          "description": "WCAG AA minimum for large text (18px+ or 14px+ bold)"
+        },
+        "ui": {
+          "value": "3:1",
+          "description": "WCAG AA minimum for UI components"
+        }
+      }
+    },
+    "focusIndicator": {
+      "minSize": {
+        "value": "2px",
+        "description": "Minimum thickness for focus rings"
+      },
+      "color": "{colors.neutral.ring}",
+      "description": "Always use high-contrast color for focus indicators"
+    }
+  },
+  "metadata": {
+    "created": "2025-10-22",
+    "version": "1.0",
+    "author": "TillLess UX Team",
+    "tooling": {
+      "figma": "Use HEX values for color styles, document OKLCH in descriptions",
+      "tailwind": "Use OKLCH values in tailwind.config.ts",
+      "css": "Implement with CSS custom properties (CSS variables)"
+    }
+  }
+}
