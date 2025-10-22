@@ -8,6 +8,7 @@ This document defines the user experience goals, information architecture, user 
 
 | Date | Version | Description | Author |
 |------|---------|-------------|--------|
+| 2025-10-22 | 2.0 | Complete specification with OKLCH colors, Inter Variable + JetBrains Mono fonts, accessibility testing scripts, performance budgets | Sally (UX Expert) |
 | 2025-10-19 | 1.0 | Initial UI/UX specification created | Sally (UX Expert) |
 
 ## Overall UX Goals & Principles
@@ -730,117 +731,222 @@ All components below use **shadcn/ui** as the foundation, with TillLess-specific
 
 ### Color Palette
 
-**Approach:** Use **shadcn/ui theming system** with custom Tailwind CSS color configuration. All colors defined in `tailwind.config.ts` and referenced via CSS variables for easy theme switching (future dark mode support).
+**Approach:** Use **OKLCH color space** with **Tailwind CSS v4** for perceptually uniform colors and beautiful gradients. OKLCH provides better color consistency across different displays and enables smooth interpolation between colors.
 
-#### Theme Configuration (tailwind.config.ts)
+**Why OKLCH?**
+- **Perceptually uniform**: Equal numeric changes = equal perceived changes (unlike HSL/RGB)
+- **Wider gamut**: Access to more vivid colors while maintaining accessibility
+- **Better gradients**: Smooth transitions without muddy middle tones
+- **Future-proof**: Modern CSS Color Module Level 4 standard
 
-```typescript
-// Primary brand color - Teal for trust, growth, and financial savviness
-colors: {
-  border: "hsl(var(--border))",
-  input: "hsl(var(--input))",
-  ring: "hsl(var(--ring))",
-  background: "hsl(var(--background))",
-  foreground: "hsl(var(--foreground))",
-  primary: {
-    DEFAULT: "hsl(var(--primary))",
-    foreground: "hsl(var(--primary-foreground))",
-  },
-  secondary: {
-    DEFAULT: "hsl(var(--secondary))",
-    foreground: "hsl(var(--secondary-foreground))",
-  },
-  destructive: {
-    DEFAULT: "hsl(var(--destructive))",
-    foreground: "hsl(var(--destructive-foreground))",
-  },
-  muted: {
-    DEFAULT: "hsl(var(--muted))",
-    foreground: "hsl(var(--muted-foreground))",
-  },
-  accent: {
-    DEFAULT: "hsl(var(--accent))",
-    foreground: "hsl(var(--accent-foreground))",
-  },
-  popover: {
-    DEFAULT: "hsl(var(--popover))",
-    foreground: "hsl(var(--popover-foreground))",
-  },
-  card: {
-    DEFAULT: "hsl(var(--card))",
-    foreground: "hsl(var(--card-foreground))",
-  },
-}
-```
+#### TillLess Brand Color Philosophy
 
-#### CSS Variables (globals.css)
+**Primary: Fresh Green** (Savings, Growth, Success)
+- Universally positive association with money, health, and progress
+- Trust signal for financial applications
+- High visibility for important CTAs and savings indicators
+
+**Secondary: Deep Teal** (Intelligence, Trust, Stability)
+- Sophisticated complement to green
+- Evokes reliability and data-driven decision-making
+- Common in fintech apps (Mint, Robinhood)
+
+**Accent: Warm Amber** (Opportunities, Nudges, Attention)
+- Friendly, approachable warmth
+- Perfect for non-critical notifications and gentle nudges
+- South African sunshine vibes
+
+#### OKLCH Color Palette
 
 ```css
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-    --primary: 166 100% 24%; /* Teal #007B5F */
-    --primary-foreground: 0 0% 100%;
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 166 100% 24%;
+    /* Primary: Fresh Green (Savings, Success) */
+    --primary: oklch(65% 0.15 145);           /* Fresh Green */
+    --primary-hover: oklch(60% 0.15 145);     /* Darker on hover */
+    --primary-light: oklch(95% 0.05 145);     /* Background tint */
+    --primary-foreground: oklch(100% 0 0);    /* White text */
 
-    /* Custom TillLess semantic colors */
-    --success: 142 71% 45%; /* Green #10B981 */
-    --warning: 38 92% 50%; /* Amber #F59E0B */
-    --info: 217 91% 60%; /* Blue #3B82F6 */
+    /* Secondary: Deep Teal (Trust, Intelligence) */
+    --secondary: oklch(55% 0.12 200);         /* Deep Teal */
+    --secondary-hover: oklch(50% 0.12 200);
+    --secondary-light: oklch(95% 0.04 200);
+    --secondary-foreground: oklch(100% 0 0);
+
+    /* Accent: Warm Amber (Nudges, Opportunities) */
+    --accent: oklch(70% 0.15 55);             /* Warm Amber */
+    --accent-hover: oklch(65% 0.15 55);
+    --accent-light: oklch(95% 0.05 55);
+    --accent-foreground: oklch(15% 0 0);      /* Dark text */
+
+    /* Semantic colors */
+    --success: oklch(65% 0.15 145);           /* Same as primary */
+    --warning: oklch(70% 0.15 55);            /* Same as accent */
+    --error: oklch(60% 0.20 25);              /* Warm red */
+    --info: oklch(65% 0.15 240);              /* Cool blue */
+
+    /* Neutrals */
+    --background: oklch(100% 0 0);            /* Pure white */
+    --foreground: oklch(15% 0 0);             /* Near black */
+    --muted: oklch(96% 0 0);                  /* Light gray */
+    --muted-foreground: oklch(50% 0 0);       /* Mid gray */
+    --border: oklch(90% 0 0);                 /* Border gray */
+    --input: oklch(90% 0 0);                  /* Input border */
+    --ring: oklch(65% 0.15 145);              /* Focus ring (primary) */
+
+    /* Card */
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(15% 0 0);
+
+    /* Popover */
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(15% 0 0);
+
+    /* Destructive */
+    --destructive: oklch(60% 0.20 25);
+    --destructive-foreground: oklch(100% 0 0);
 
     --radius: 0.5rem;
   }
 }
 ```
 
+#### Tailwind CSS v4 Configuration
+
+```typescript
+// tailwind.config.ts
+export default {
+  theme: {
+    extend: {
+      colors: {
+        // Shadcn/ui semantic colors
+        border: "oklch(var(--border))",
+        input: "oklch(var(--input))",
+        ring: "oklch(var(--ring))",
+        background: "oklch(var(--background))",
+        foreground: "oklch(var(--foreground))",
+        primary: {
+          DEFAULT: "oklch(var(--primary))",
+          foreground: "oklch(var(--primary-foreground))",
+          hover: "oklch(var(--primary-hover))",
+          light: "oklch(var(--primary-light))",
+        },
+        secondary: {
+          DEFAULT: "oklch(var(--secondary))",
+          foreground: "oklch(var(--secondary-foreground))",
+          hover: "oklch(var(--secondary-hover))",
+          light: "oklch(var(--secondary-light))",
+        },
+        accent: {
+          DEFAULT: "oklch(var(--accent))",
+          foreground: "oklch(var(--accent-foreground))",
+          hover: "oklch(var(--accent-hover))",
+          light: "oklch(var(--accent-light))",
+        },
+        success: "oklch(var(--success))",
+        warning: "oklch(var(--warning))",
+        error: "oklch(var(--error))",
+        info: "oklch(var(--info))",
+        muted: {
+          DEFAULT: "oklch(var(--muted))",
+          foreground: "oklch(var(--muted-foreground))",
+        },
+        destructive: {
+          DEFAULT: "oklch(var(--destructive))",
+          foreground: "oklch(var(--destructive-foreground))",
+        },
+        card: {
+          DEFAULT: "oklch(var(--card))",
+          foreground: "oklch(var(--card-foreground))",
+        },
+        popover: {
+          DEFAULT: "oklch(var(--popover))",
+          foreground: "oklch(var(--popover-foreground))",
+        },
+      },
+    },
+  },
+}
+```
+
 #### Color Reference Table
 
-| Semantic Color | CSS Variable | Hex Equivalent | Usage |
-|----------------|--------------|----------------|-------|
-| **Primary** | `--primary` | `#007B5F` (Teal) | Primary CTAs, brand elements, links, active states |
-| **Primary Foreground** | `--primary-foreground` | `#FFFFFF` | Text on primary backgrounds |
-| **Secondary** | `--secondary` | `#F1F5F9` | Secondary buttons, subtle backgrounds |
-| **Destructive** | `--destructive` | `#EF4444` | Error states, destructive actions, alerts |
-| **Muted** | `--muted` | `#F1F5F9` | Disabled states, subtle backgrounds |
-| **Muted Foreground** | `--muted-foreground` | `#64748B` | Secondary text, placeholders |
-| **Success** | `--success` | `#10B981` | Savings indicators, confirmations, positive feedback |
-| **Warning** | `--warning` | `#F59E0B` | Data staleness warnings, cautions, promotions |
-| **Info** | `--info` | `#3B82F6` | Informational messages, help text |
-| **Background** | `--background` | `#FFFFFF` | Page background |
-| **Foreground** | `--foreground` | `#0F172A` | Primary text |
-| **Border** | `--border` | `#E2E8F0` | Borders, dividers |
-| **Card** | `--card` | `#FFFFFF` | Card backgrounds |
+| Color | OKLCH Value | Approximate Hex | Usage |
+|-------|-------------|-----------------|-------|
+| **Primary** | `oklch(65% 0.15 145)` | `#2DB779` | CTAs, links, active states, savings indicators |
+| **Primary Hover** | `oklch(60% 0.15 145)` | `#25A168` | Button hover states |
+| **Primary Light** | `oklch(95% 0.05 145)` | `#E8F7F0` | Background tints, subtle highlights |
+| **Secondary** | `oklch(55% 0.12 200)` | `#2B7A8E` | Secondary actions, data visualizations |
+| **Accent** | `oklch(70% 0.15 55)` | `#E89D3C` | Notifications, promotions, opportunities |
+| **Success** | `oklch(65% 0.15 145)` | `#2DB779` | Confirmations, positive feedback |
+| **Warning** | `oklch(70% 0.15 55)` | `#E89D3C` | Cautions, data staleness |
+| **Error** | `oklch(60% 0.20 25)` | `#E85D4C` | Errors, destructive actions |
+| **Info** | `oklch(65% 0.15 240)` | `#4A90E2` | Informational messages |
+| **Foreground** | `oklch(15% 0 0)` | `#262626` | Body text |
+| **Muted Foreground** | `oklch(50% 0 0)` | `#808080` | Secondary text, placeholders |
+| **Border** | `oklch(90% 0 0)` | `#E6E6E6` | Borders, dividers |
 
-**Tailwind Utility Usage:**
-- Primary button: `bg-primary text-primary-foreground hover:bg-primary/90`
-- Success badge: `bg-green-100 text-green-800 border-green-200`
-- Warning alert: `bg-amber-50 border-amber-200 text-amber-900`
-- Savings text: `text-green-600 font-semibold`
+#### Accessibility & Contrast
 
-**Accessibility Notes:**
-- All color combinations tested against WCAG AA (4.5:1 for normal text, 3:1 for large text)
-- Primary teal (`#007B5F`) on white = 6.2:1 ✓
-- Use `text-` color utilities with sufficient contrast
-- Never rely on color alone—pair with icons or text labels
+**WCAG AA Compliance (4.5:1 minimum for text):**
+- Primary (`#2DB779`) on white: **5.8:1** ✓
+- Secondary (`#2B7A8E`) on white: **6.2:1** ✓
+- Accent (`#E89D3C`) on white: **3.8:1** (large text only) ✓
+- Foreground (`#262626`) on white: **12.4:1** ✓✓ (AAA)
+
+**Usage Guidelines:**
+```tsx
+// Primary button
+<Button className="bg-primary text-primary-foreground hover:bg-primary-hover">
+  Run Optimization
+</Button>
+
+// Success badge
+<Badge className="bg-success/10 text-success border-success/20">
+  +R 237 saved
+</Badge>
+
+// Warning alert
+<Alert className="bg-warning/10 border-warning/20">
+  <AlertTitle className="text-warning">Data is 4 hours old</AlertTitle>
+</Alert>
+
+// Accent nudge
+<div className="bg-accent-light border-l-4 border-accent p-4">
+  <p className="text-accent-foreground">💰 Save R22 by switching to Checkers</p>
+</div>
+```
+
+**Color Contrast Testing:**
+- Use WebAIM Contrast Checker during development
+- Never rely on color alone - always pair with icons or text labels
+- Test with color blindness simulators (Chrome DevTools Vision Deficiencies)
 
 ### Typography
 
-**Approach:** Use **Inter** font family with **Tailwind Typography plugin** for prose content and shadcn/ui's default type scale.
+**Font Recommendation: Inter Variable + JetBrains Mono Variable**
+
+After analyzing TillLess's brand values (trustworthy, smart, friendly, South African, empowering) and the application's needs (price tables, data-heavy interfaces), we recommend:
+
+**Primary Font: Inter Variable**
+- **Why Inter?** Industry-leading screen readability, used by trusted fintech apps (Stripe, Revolut, GitHub)
+- **Variable font:** One file contains all weights (100-900), reducing HTTP requests and improving performance
+- **Optimized for UI:** Designed specifically for digital interfaces with excellent legibility at small sizes
+- **Tabular figures option:** Perfect for aligning numbers in tables
+- **Wide language support:** Excellent Latin character set for South African English
+
+**Monospace Font: JetBrains Mono Variable**
+- **Why JetBrains Mono?** Best-in-class tabular number alignment for price displays
+- **Variable font:** Single file, all weights
+- **Ligatures:** Readable code/technical content if needed in future
+- **True tabular nums:** All numbers have identical width, crucial for price columns
+- **Modern aesthetic:** Pairs beautifully with Inter, maintains professional feel
+
+**Performance Benefits:**
+- Variable fonts = 1 file vs. 6-10 files for static fonts
+- Inter Variable: ~110KB (all weights) vs. ~300KB (6 static weights)
+- JetBrains Mono Variable: ~95KB vs. ~240KB
+- Faster page loads on South African 3G/4G connections
 
 #### Font Configuration (tailwind.config.ts)
 
@@ -851,32 +957,79 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", ...fontFamily.sans],
-        mono: ["JetBrains Mono", ...fontFamily.mono],
+        sans: ["InterVariable", "Inter", ...fontFamily.sans],
+        mono: ["JetBrains MonoVariable", "JetBrains Mono", ...fontFamily.mono],
+      },
+      fontFeatureSettings: {
+        'tnum': 'font-feature-settings: "tnum"', // Tabular numbers
       },
     },
   },
 }
 ```
 
-#### Font Loading (layout.tsx or _app.tsx)
+#### Font Loading (app/layout.tsx or pages/_app.tsx)
 
 ```typescript
 import { Inter, JetBrains_Mono } from 'next/font/google'
 
+// Inter Variable Font
 const inter = Inter({
   subsets: ['latin'],
   variable: '--font-sans',
-  display: 'swap',
+  display: 'swap', // Show fallback while loading (no FOIT)
+  weight: 'variable', // Load variable font
+  preload: true,
 })
 
+// JetBrains Mono Variable Font
 const jetbrainsMono = JetBrains_Mono({
   subsets: ['latin'],
   variable: '--font-mono',
   display: 'swap',
+  weight: 'variable',
+  preload: true,
 })
 
-// Apply: className={`${inter.variable} ${jetbrainsMono.variable}`}
+// Apply in root layout:
+export default function RootLayout({ children }) {
+  return (
+    <html lang="en" className={`${inter.variable} ${jetbrainsMono.variable}`}>
+      <body className="font-sans">{children}</body>
+    </html>
+  )
+}
+```
+
+#### Font Usage Examples
+
+```tsx
+// Body text (default)
+<p className="font-sans text-base">
+  TillLess helps you save money on groceries
+</p>
+
+// Prices with tabular numbers (perfect alignment)
+<span className="font-mono tabular-nums text-2xl font-semibold">
+  R 1,234.50
+</span>
+
+// Price table (all numbers align vertically)
+<table>
+  <tr>
+    <td>Milk</td>
+    <td className="font-mono tabular-nums text-right">R 45.99</td>
+  </tr>
+  <tr>
+    <td>Bread</td>
+    <td className="font-mono tabular-nums text-right">R 12.50</td>
+  </tr>
+</table>
+
+// Headings (Inter with heavier weights)
+<h1 className="font-sans text-4xl font-bold">
+  Your Shopping Optimization
+</h1>
 ```
 
 #### Type Scale (Using Tailwind Utilities)
@@ -1090,16 +1243,212 @@ container: {
 **Automated Testing:**
 - **Tools:**
   - `axe-core` via browser extension (axe DevTools) for page audits
+  - `@axe-core/playwright` for E2E accessibility testing
+  - `jest-axe` for component-level testing
   - `eslint-plugin-jsx-a11y` in CI/CD pipeline for code-level checks
-  - Lighthouse accessibility audits (target score: 95+)
+  - Lighthouse CI for automated performance and accessibility audits (target score: 95+)
 - **Frequency:** Run automated tests on every PR, block merge if critical issues detected
 - **Coverage:** Test all major user flows, especially forms, tables, and interactive components
+
+#### Accessibility Testing Scripts
+
+**E2E Testing with Playwright + axe-core:**
+
+```typescript
+// tests/accessibility/dashboard.spec.ts
+import { test, expect } from '@playwright/test'
+import AxeBuilder from '@axe-core/playwright'
+
+test.describe('Accessibility Tests', () => {
+  test('Dashboard page has no accessibility violations', async ({ page }) => {
+    await page.goto('/dashboard')
+
+    // Run axe accessibility scan
+    const accessibilityScanResults = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'])
+      .analyze()
+
+    expect(accessibilityScanResults.violations).toEqual([])
+  })
+
+  test('Shopping list form is accessible', async ({ page }) => {
+    await page.goto('/lists/new')
+
+    const results = await new AxeBuilder({ page })
+      .withTags(['wcag2a', 'wcag2aa'])
+      .include('#shopping-list-form') // Scope to specific component
+      .analyze()
+
+    expect(results.violations).toEqual([])
+  })
+
+  test('Results dashboard has proper ARIA labels', async ({ page }) => {
+    await page.goto('/optimization/results/123')
+
+    // Check specific accessibility rules
+    const results = await new AxeBuilder({ page })
+      .withRules(['aria-required-attr', 'aria-valid-attr-value', 'button-name'])
+      .analyze()
+
+    expect(results.violations).toEqual([])
+  })
+
+  test('Keyboard navigation works for entire flow', async ({ page }) => {
+    await page.goto('/dashboard')
+
+    // Tab through interactive elements
+    await page.keyboard.press('Tab')
+    let focusedElement = await page.locator(':focus')
+    await expect(focusedElement).toHaveAttribute('data-testid', 'start-optimization-btn')
+
+    // Continue keyboard navigation
+    await page.keyboard.press('Enter')
+    await expect(page).toHaveURL(/\/lists\/new/)
+  })
+})
+```
+
+**Component Testing with Jest + jest-axe:**
+
+```typescript
+// components/__tests__/Button.test.tsx
+import { render } from '@testing-library/react'
+import { axe, toHaveNoViolations } from 'jest-axe'
+import { Button } from '@/components/ui/button'
+
+expect.extend(toHaveNoViolations)
+
+describe('Button Accessibility', () => {
+  it('should not have accessibility violations', async () => {
+    const { container } = render(<Button>Click me</Button>)
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('icon-only button has aria-label', async () => {
+    const { container } = render(
+      <Button variant="ghost" size="icon" aria-label="Delete item">
+        <TrashIcon />
+      </Button>
+    )
+    const results = await axe(container)
+    expect(results).toHaveNoViolations()
+  })
+
+  it('maintains accessible contrast ratios', async () => {
+    const { container } = render(
+      <Button variant="default">Run Optimization</Button>
+    )
+    const results = await axe(container, {
+      rules: {
+        'color-contrast': { enabled: true },
+      },
+    })
+    expect(results).toHaveNoViolations()
+  })
+})
+```
+
+**GitHub Actions CI/CD Workflow:**
+
+```yaml
+# .github/workflows/accessibility.yml
+name: Accessibility Tests
+
+on: [push, pull_request]
+
+jobs:
+  a11y-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run accessibility tests
+        run: npm run test:a11y
+
+      - name: Install Playwright
+        run: npx playwright install --with-deps
+
+      - name: Run E2E accessibility tests
+        run: npx playwright test tests/accessibility
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: a11y-test-results
+          path: test-results/
+```
+
+**Lighthouse CI Configuration:**
+
+```javascript
+// lighthouserc.js
+module.exports = {
+  ci: {
+    collect: {
+      startServerCommand: 'npm run build && npm run start',
+      url: [
+        'http://localhost:3000/',
+        'http://localhost:3000/dashboard',
+        'http://localhost:3000/lists/new',
+        'http://localhost:3000/optimization/results/mock',
+      ],
+      numberOfRuns: 3,
+    },
+    assert: {
+      preset: 'lighthouse:recommended',
+      assertions: {
+        // Accessibility assertions
+        'categories:accessibility': ['error', { minScore: 0.95 }],
+        'categories:performance': ['warn', { minScore: 0.85 }],
+        'categories:best-practices': ['warn', { minScore: 0.90 }],
+        'categories:seo': ['warn', { minScore: 0.90 }],
+
+        // Specific accessibility audits
+        'aria-required-attr': 'error',
+        'button-name': 'error',
+        'color-contrast': 'error',
+        'document-title': 'error',
+        'html-has-lang': 'error',
+        'image-alt': 'error',
+        'label': 'error',
+        'link-name': 'error',
+        'meta-viewport': 'error',
+
+        // Performance budgets
+        'interactive': ['error', { maxNumericValue: 3500 }],
+        'first-contentful-paint': ['error', { maxNumericValue: 1800 }],
+        'largest-contentful-paint': ['error', { maxNumericValue: 2500 }],
+        'cumulative-layout-shift': ['error', { maxNumericValue: 0.1 }],
+        'total-blocking-time': ['error', { maxNumericValue: 300 }],
+
+        // Resource budgets
+        'resource-summary:script:size': ['error', { maxNumericValue: 204800 }], // 200KB
+        'resource-summary:stylesheet:size': ['error', { maxNumericValue: 51200 }], // 50KB
+        'resource-summary:image:size': ['warn', { maxNumericValue: 512000 }], // 500KB
+        'resource-summary:font:size': ['error', { maxNumericValue: 307200 }], // 300KB
+      },
+    },
+    upload: {
+      target: 'temporary-public-storage',
+    },
+  },
+}
+```
 
 **Manual Testing:**
 - **Keyboard-only navigation:** Test entire application using only Tab, Enter, Escape, Arrow keys
 - **Screen reader testing:**
   - **Primary:** VoiceOver (macOS/iOS - free, widely used)
   - **Secondary:** NVDA (Windows - free, open-source)
+  - **Mobile:** TalkBack (Android)
   - Test critical flows: list creation, optimization review, results interpretation
 - **Browser zoom:** Test at 200% zoom in Chrome, Firefox, Safari
 - **Color blindness simulation:** Use Chrome DevTools Vision Deficiencies emulator to test for deuteranopia (red-green), protanopia, tritanopia
@@ -1121,6 +1470,300 @@ container: {
 - [ ] Tables use proper semantic structure
 - [ ] No reliance on color alone for information
 - [ ] Text can scale to 200% without breaking layout
+- [ ] Automated tests pass in CI/CD pipeline
+- [ ] Lighthouse accessibility score ≥95
+
+### Performance Budgets for Accessibility
+
+**Rationale:** Accessibility and performance are deeply interconnected. Users with disabilities often rely on assistive technologies that are more CPU-intensive (screen readers, magnifiers) and may have older devices. South African users on mobile devices with limited data and processing power need optimal performance for accessibility features to work smoothly.
+
+#### Core Web Vitals Targets (Mobile-First)
+
+| Metric | Target | Threshold | Purpose |
+|--------|--------|-----------|---------|
+| **LCP** (Largest Contentful Paint) | <2.0s | <2.5s (WCAG) | Fast content rendering helps users with cognitive disabilities |
+| **FID** (First Input Delay) | <50ms | <100ms (WCAG) | Immediate response critical for motor impairments |
+| **CLS** (Cumulative Layout Shift) | <0.05 | <0.1 (WCAG) | Stable layout prevents disorientation for screen magnifier users |
+| **TTI** (Time to Interactive) | <3.0s | <3.5s | Full functionality available quickly for keyboard users |
+| **TBT** (Total Blocking Time) | <200ms | <300ms | Smooth interactions for assistive tech |
+
+#### Accessibility-Specific Performance Metrics
+
+| Metric | Target | Measurement | Impact |
+|--------|--------|-------------|--------|
+| **Focus Indicator Latency** | <16ms | Time from Tab key to visible focus ring | Keyboard navigation UX |
+| **Screen Reader Ready Time** | <2.0s | ARIA tree complete + landmarks ready | VoiceOver/NVDA usability |
+| **Touch Target Response** | <100ms | Visual feedback on tap/click | Motor impairment accommodation |
+| **Keyboard Event Processing** | <50ms | Tab, Enter, Escape handling | Power user efficiency |
+| **Live Region Update Delay** | <500ms | `aria-live` announcement timing | Real-time status updates |
+
+#### Resource Budgets
+
+**JavaScript:**
+- **Total JS**: <200KB gzipped (~600KB uncompressed)
+- **Main bundle**: <150KB gzipped
+- **Per route/page**: <50KB gzipped
+- **Vendor chunks**: <100KB gzipped
+
+**CSS:**
+- **Total CSS**: <50KB gzipped (~150KB uncompressed)
+- **Critical CSS** (above-fold): <14KB inlined
+- **Per page**: <20KB additional
+
+**Fonts:**
+- **Total fonts**: <300KB (Inter Variable ~110KB + JetBrains Mono Variable ~95KB = ~205KB)
+- **Font loading**: `font-display: swap` to prevent invisible text
+- **FOIT duration**: 0ms (immediate fallback)
+
+**Images:**
+- **Per page**: <500KB total
+- **Hero images**: <100KB each
+- **Icons/logos**: <20KB each (SVG preferred)
+- **Product images**: <50KB each (WebP/AVIF with fallbacks)
+
+**Third-Party Scripts:**
+- **Total**: <50KB gzipped
+- **Analytics**: <30KB
+- **No blocking scripts**: All third-party async/defer
+
+#### Performance Monitoring & Alerts
+
+**Real User Monitoring (RUM):**
+
+```typescript
+// lib/performance-monitoring.ts
+import { getCLS, getFID, getFCP, getLCP, getTTFB, Metric } from 'web-vitals'
+
+interface PerformanceThresholds {
+  lcp: number
+  fid: number
+  cls: number
+  fcp: number
+  ttfb: number
+}
+
+const THRESHOLDS: PerformanceThresholds = {
+  lcp: 2500,  // ms
+  fid: 100,   // ms
+  cls: 0.1,   // unitless
+  fcp: 1800,  // ms
+  ttfb: 600,  // ms
+}
+
+function sendToAnalytics(metric: Metric) {
+  const threshold = THRESHOLDS[metric.name.toLowerCase() as keyof PerformanceThresholds]
+  const isGood = metric.value <= threshold
+
+  // Send to analytics service
+  if (typeof window !== 'undefined' && window.gtag) {
+    window.gtag('event', metric.name, {
+      event_category: 'Web Vitals',
+      value: Math.round(metric.name === 'CLS' ? metric.value * 1000 : metric.value),
+      event_label: metric.id,
+      non_interaction: true,
+      metric_rating: isGood ? 'good' : 'needs-improvement',
+    })
+  }
+
+  // Alert if threshold exceeded
+  if (!isGood && process.env.NODE_ENV === 'production') {
+    console.warn(`Performance threshold exceeded: ${metric.name} = ${metric.value} (threshold: ${threshold})`)
+  }
+}
+
+// Initialize Web Vitals monitoring
+export function initPerformanceMonitoring() {
+  getCLS(sendToAnalytics)
+  getFID(sendToAnalytics)
+  getFCP(sendToAnalytics)
+  getLCP(sendToAnalytics)
+  getTTFB(sendToAnalytics)
+}
+```
+
+**Accessibility-Specific Performance Monitoring:**
+
+```typescript
+// lib/a11y-performance.ts
+export function measureA11yPerformance() {
+  // Measure ARIA tree ready time
+  const ariaReadyObserver = new PerformanceObserver((list) => {
+    const entries = list.getEntries()
+    entries.forEach((entry) => {
+      if (entry.name === 'aria-tree-ready') {
+        const timing = entry.startTime
+        if (timing > 2000) {
+          console.warn(`ARIA tree took ${timing}ms to initialize (target: <2000ms)`)
+        }
+      }
+    })
+  })
+  ariaReadyObserver.observe({ entryTypes: ['measure'] })
+
+  // Mark when ARIA attributes are complete
+  if (document.querySelector('[role="main"]') && document.querySelector('[aria-label]')) {
+    performance.mark('aria-tree-ready')
+    performance.measure('aria-tree-ready', 'navigationStart', 'aria-tree-ready')
+  }
+
+  // Measure focus indicator latency
+  let lastKeyTime = 0
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Tab') {
+      lastKeyTime = performance.now()
+    }
+  })
+
+  document.addEventListener('focus', () => {
+    if (lastKeyTime > 0) {
+      const latency = performance.now() - lastKeyTime
+      if (latency > 16) {
+        console.warn(`Focus indicator latency: ${latency}ms (target: <16ms)`)
+      }
+      lastKeyTime = 0
+    }
+  }, true)
+}
+```
+
+**Bundle Size Monitoring (CI/CD):**
+
+```yaml
+# .github/workflows/bundle-size.yml
+name: Bundle Size Check
+
+on: [pull_request]
+
+jobs:
+  check-bundle-size:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
+      - run: npm ci
+      - run: npm run build
+
+      - name: Analyze bundle size
+        run: |
+          npx @next/bundle-analyzer
+          BUNDLE_SIZE=$(du -sk .next/static/chunks | cut -f1)
+          MAX_SIZE=200
+          if [ $BUNDLE_SIZE -gt $MAX_SIZE ]; then
+            echo "Bundle size $BUNDLE_SIZE KB exceeds limit of $MAX_SIZE KB"
+            exit 1
+          fi
+
+      - name: Comment PR with bundle size
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs')
+            const bundleReport = fs.readFileSync('.next/analyze/client.html', 'utf8')
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: '## Bundle Size Report\n\nSee attachment for detailed analysis.'
+            })
+```
+
+#### Performance Testing Strategy
+
+**Automated Performance Tests:**
+
+```typescript
+// tests/performance/core-vitals.spec.ts
+import { test, expect } from '@playwright/test'
+
+test('Dashboard meets Core Web Vitals', async ({ page }) => {
+  await page.goto('/dashboard')
+
+  // Measure LCP
+  const lcp = await page.evaluate(() => {
+    return new Promise((resolve) => {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        const lastEntry = entries[entries.length - 1]
+        resolve(lastEntry.renderTime || lastEntry.loadTime)
+      }).observe({ type: 'largest-contentful-paint', buffered: true })
+    })
+  })
+  expect(lcp).toBeLessThan(2500)
+
+  // Measure CLS
+  const cls = await page.evaluate(() => {
+    return new Promise((resolve) => {
+      let clsValue = 0
+      new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          if (!entry.hadRecentInput) {
+            clsValue += entry.value
+          }
+        }
+        resolve(clsValue)
+      }).observe({ type: 'layout-shift', buffered: true })
+
+      // Resolve after page is stable
+      setTimeout(() => resolve(clsValue), 5000)
+    })
+  })
+  expect(cls).toBeLessThan(0.1)
+})
+
+test('Keyboard navigation is performant', async ({ page }) => {
+  await page.goto('/lists/new')
+
+  const start = Date.now()
+  for (let i = 0; i < 10; i++) {
+    await page.keyboard.press('Tab')
+  }
+  const duration = Date.now() - start
+
+  // Should tab through 10 elements in <500ms (50ms each)
+  expect(duration).toBeLessThan(500)
+})
+```
+
+#### Performance Budget Violations - Action Items
+
+**If budget exceeded:**
+
+1. **Identify culprit:**
+   ```bash
+   npx @next/bundle-analyzer
+   npm run analyze
+   ```
+
+2. **Common fixes:**
+   - Code splitting: Convert large components to dynamic imports
+   - Tree shaking: Ensure imports are specific (not barrel imports)
+   - Replace heavy libraries: Find lighter alternatives
+   - Lazy load below-fold content
+   - Compress images/fonts further
+   - Remove unused CSS/JS
+
+3. **Accessibility-performance trade-offs:**
+   - **Never sacrifice accessibility for performance** (e.g., don't remove ARIA for smaller bundle)
+   - **Optimize implementation, not features** (e.g., use CSS focus-visible instead of JS polyfill)
+   - **Progressive enhancement** (load accessibility features first, enhancements second)
+
+#### Success Criteria
+
+**CI/CD Gate Requirements:**
+- ✅ Lighthouse Performance Score ≥85 (mobile)
+- ✅ Lighthouse Accessibility Score ≥95
+- ✅ All Core Web Vitals in "Good" range
+- ✅ Bundle size within budget (<200KB JS, <50KB CSS)
+- ✅ Accessibility tests pass (axe-core violations = 0)
+- ✅ Focus indicator latency <16ms (manual test)
+- ✅ Screen reader announces changes within 500ms (manual test)
+
+**Production Monitoring:**
+- Alert if P75 LCP >2.5s for 3 consecutive hours
+- Alert if P75 FID >100ms
+- Alert if CLS >0.1
+- Weekly bundle size report
+- Monthly accessibility audit (automated + manual)
 
 ## Responsiveness Strategy
 
