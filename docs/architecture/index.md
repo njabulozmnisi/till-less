@@ -1,38 +1,75 @@
-# Architecture Sections
+# TillLess Fullstack Architecture Document
 
-## Core Architecture Documents
+## Table of Contents
 
-* 00-overview.md
-* 01-1-purpose-context.md
-* 02-2-guiding-constraints.md
-* 03-3-high-level-architecture-overview.md
-* 04-4-component-breakdown.md
-* 05-5-key-data-flows.md
-* 06-6-technology-stack.md
-* 07-7-non-functional-considerations.md
-* 08-8-deployment-environments.md
-* 09-9-monitoring-alerting.md
-* 10-10-roadmap-phase-transitions.md
-* 11-11-open-technical-questions.md
-* 12-12-references.md
-
-## Domain-Driven Design (DDD) Architecture
-
-* **[ddd-design.md](./ddd-design.md)** - Complete DDD architecture design with bounded contexts, aggregates, and domain models
-* **[ddd-ubiquitous-language.md](./ddd-ubiquitous-language.md)** - Shared vocabulary and terminology across all bounded contexts
-* **[ddd-context-mapping.md](./ddd-context-mapping.md)** - Context relationships, integration patterns, and anti-corruption layers
-* **[ddd-implementation-guide.md](./ddd-implementation-guide.md)** - Step-by-step migration guide from current architecture to DDD
-
-## Specialized Architecture Topics
-
-* api-routes-bff.md
-* csv-import-backend.md
-* dynamic-retailer-plugin-architecture.md
-* edge-case-handling.md
-* frontend-architecture.md
-* pdf-export-architecture.md
-* receipt-upload-storage.md
-* resilience-operational-readiness.md
-* source-tree.md
-* testing-strategy.md
-* technology-versions.md
+- [TillLess Fullstack Architecture Document](#table-of-contents)
+  - [Table of Contents](./table-of-contents.md)
+  - [1. Introduction](./1-introduction.md)
+    - [1.1 Starter Template or Existing Project](./1-introduction.md#11-starter-template-or-existing-project)
+    - [1.2 Overview](./1-introduction.md#12-overview)
+    - [1.3 Change Log](./1-introduction.md#13-change-log)
+  - [2. High-Level Architecture](./2-high-level-architecture.md)
+    - [2.1 Technical Summary](./2-high-level-architecture.md#21-technical-summary)
+    - [2.2 Platform and Infrastructure Choice](./2-high-level-architecture.md#22-platform-and-infrastructure-choice)
+    - [2.3 Repository Structure](./2-high-level-architecture.md#23-repository-structure)
+    - [2.4 High-Level Architecture Diagram](./2-high-level-architecture.md#24-high-level-architecture-diagram)
+    - [2.5 Architectural Patterns](./2-high-level-architecture.md#25-architectural-patterns)
+  - [3. Tech Stack](./3-tech-stack.md)
+  - [4. Data Models](./4-data-models.md)
+    - [4.1 Core Domain Entities](./4-data-models.md#41-core-domain-entities)
+    - [4.2 Optimization Domain](./4-data-models.md#42-optimization-domain)
+    - [4.3 TypeScript Interfaces](./4-data-models.md#43-typescript-interfaces)
+  - [5. API Specification](./5-api-specification.md)
+    - [5.1 tRPC Router Structure](./5-api-specification.md#51-trpc-router-structure)
+    - [5.2 REST Endpoints](./5-api-specification.md#52-rest-endpoints)
+  - [6. Components](./6-components.md)
+    - [6.1 Frontend Component Architecture](./6-components.md#61-frontend-component-architecture)
+    - [6.2 Key UI Components](./6-components.md#62-key-ui-components)
+  - [7. External APIs](./7-external-apis.md)
+    - [7.1 Google Cloud Vision API](./7-external-apis.md#71-google-cloud-vision-api)
+    - [7.2 Social Media APIs (Phase 1.5)](./7-external-apis.md#72-social-media-apis-phase-15)
+    - [7.3 Retailer Integration APIs](./7-external-apis.md#73-retailer-integration-apis)
+  - [8. Core Workflows](./8-core-workflows.md)
+    - [8.1 Shopping List Creation Flow](./8-core-workflows.md#81-shopping-list-creation-flow)
+    - [8.2 Item Addition & Auto-Categorization Flow](./8-core-workflows.md#82-item-addition-auto-categorization-flow)
+    - [8.3 Optimization Engine Flow](./8-core-workflows.md#83-optimization-engine-flow)
+  - [9. Database Schema](./9-database-schema.md)
+    - [9.1 Complete Prisma Schema](./9-database-schema.md#91-complete-prisma-schema)
+    - [9.2 Migration Strategy](./9-database-schema.md#92-migration-strategy)
+  - [10. Frontend Architecture](./10-frontend-architecture.md)
+    - [10.1 Next.js App Router Structure](./10-frontend-architecture.md#101-nextjs-app-router-structure)
+    - [10.2 State Management](./10-frontend-architecture.md#102-state-management)
+  - [11. Backend Architecture](./11-backend-architecture.md)
+    - [11.1 NestJS Module Structure](./11-backend-architecture.md#111-nestjs-module-structure)
+    - [11.2 Dependency Injection](./11-backend-architecture.md#112-dependency-injection)
+  - [12. Unified Project Structure](./12-unified-project-structure.md)
+  - [13. Development Workflow](./13-development-workflow.md)
+    - [13.1 Local Development](./13-development-workflow.md#131-local-development)
+    - [13.2 Git Flow](./13-development-workflow.md#132-git-flow)
+  - [14. Deployment Architecture](./14-deployment-architecture.md)
+    - [14.1 Vercel (Frontend)](./14-deployment-architecture.md#141-vercel-frontend)
+    - [14.2 Railway (Backend)](./14-deployment-architecture.md#142-railway-backend)
+    - [14.3 Infrastructure Cost Breakdown](./14-deployment-architecture.md#143-infrastructure-cost-breakdown)
+  - [15. Security and Performance](./15-security-and-performance.md)
+    - [15.1 Security Measures](./15-security-and-performance.md#151-security-measures)
+    - [15.2 Performance Optimizations](./15-security-and-performance.md#152-performance-optimizations)
+  - [16. Testing Strategy](./16-testing-strategy.md)
+    - [16.1 Unit Tests (Vitest)](./16-testing-strategy.md#161-unit-tests-vitest)
+    - [16.2 Integration Tests (Testcontainers)](./16-testing-strategy.md#162-integration-tests-testcontainers)
+    - [16.3 E2E Tests (Playwright)](./16-testing-strategy.md#163-e2e-tests-playwright)
+  - [17. Coding Standards](./17-coding-standards.md)
+    - [17.1 TypeScript](./17-coding-standards.md#171-typescript)
+    - [17.2 React/Next.js](./17-coding-standards.md#172-reactnextjs)
+    - [17.3 NestJS](./17-coding-standards.md#173-nestjs)
+    - [17.4 File Naming](./17-coding-standards.md#174-file-naming)
+    - [17.5 Code Formatting](./17-coding-standards.md#175-code-formatting)
+  - [18. Error Handling Strategy](./18-error-handling-strategy.md)
+    - [18.1 Frontend Error Boundaries](./18-error-handling-strategy.md#181-frontend-error-boundaries)
+    - [18.2 Backend Error Handling](./18-error-handling-strategy.md#182-backend-error-handling)
+    - [18.3 tRPC Error Handling](./18-error-handling-strategy.md#183-trpc-error-handling)
+  - [19. Monitoring and Observability](./19-monitoring-and-observability.md)
+    - [19.1 Sentry Integration](./19-monitoring-and-observability.md#191-sentry-integration)
+    - [19.2 Logging](./19-monitoring-and-observability.md#192-logging)
+    - [19.3 Health Checks](./19-monitoring-and-observability.md#193-health-checks)
+    - [19.4 Analytics](./19-monitoring-and-observability.md#194-analytics)
+  - [Conclusion](./conclusion.md)

@@ -48,6 +48,12 @@ persona:
   focus: Executing story tasks with precision, updating Dev Agent Record sections only, maintaining minimal context overhead
 
 core_principles:
+  - CRITICAL: BEFORE ANY WORK - Follow Git Flow + Issue-First workflow from CLAUDE.md in project root
+  - CRITICAL: GitHub Issue FIRST - Verify Issue exists or create one before starting any work
+  - CRITICAL: Branch naming MUST include Issue number - 'feature/<issue>-<slug>' (e.g., feature/123-add-csv-export)
+  - CRITICAL: All commits MUST reference Issue - Use conventional format 'feat(123): description' or 'fix(456): description'
+  - CRITICAL: Before merge - Post PR review as Issue comment (NOT as file in repo)
+  - CRITICAL: After merge - checkout develop, pull develop, push only if safe, update Issue, NEVER delete branches
   - CRITICAL: Story has ALL info you will need aside from what you loaded during the startup commands. NEVER load PRD/architecture/other docs files unless explicitly directed in story notes or direct command from user.
   - CRITICAL: ALWAYS check current folder structure before starting your story tasks, don't create new working directory if it already exists. Create new one when you're sure it's a brand new project.
   - CRITICAL: ONLY update story file Dev Agent Record sections (checkboxes/Debug Log/Completion Notes/Change Log)

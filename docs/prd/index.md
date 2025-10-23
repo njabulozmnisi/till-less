@@ -1,17 +1,74 @@
-# PRD Sections
+# TillLess Product Requirements Document (PRD)
 
-* 00-overview.md
-* 01-1-executive-summary.md
-* 02-2-background-problem-statement.md
-* 03-3-goals-success-metrics.md
-* 04-4-target-users-personas.md
-* 05-5-scope-phase-1-mvp.md
-* 06-6-assumptions-dependencies.md
-* 07-7-detailed-requirements.md
-* 08-8-user-journeys.md
-* 09-9-data-model-integrations.md
-* 10-10-analytics-telemetry.md
-* 11-11-release-plan.md
-* 12-12-risks-mitigations.md
-* 13-13-open-questions.md
-* 14-14-appendices.md
+## Table of Contents
+
+- [TillLess Product Requirements Document (PRD)](#table-of-contents)
+  - [Table of Contents](./table-of-contents.md)
+  - [1. Goals and Background Context](./1-goals-and-background-context.md)
+    - [1.1 Goals](./1-goals-and-background-context.md#11-goals)
+    - [1.2 Background Context](./1-goals-and-background-context.md#12-background-context)
+    - [1.3 Change Log](./1-goals-and-background-context.md#13-change-log)
+  - [2. Requirements](./2-requirements.md)
+    - [2.1 Functional Requirements](./2-requirements.md#21-functional-requirements)
+      - [Core Shopping List & Category Management (FR1-FR15)](./2-requirements.md#core-shopping-list-category-management-fr1-fr15)
+      - [Dynamic Retailer Management (FR16-FR27)](./2-requirements.md#dynamic-retailer-management-fr16-fr27)
+      - [Web Scraping & Price Collection (FR28-FR35)](./2-requirements.md#web-scraping-price-collection-fr28-fr35)
+      - [Loyalty Pricing Integration (FR36-FR42)](./2-requirements.md#loyalty-pricing-integration-fr36-fr42)
+      - [Domain-Driven Design (DDD) Principles (FR43)](./2-requirements.md#domain-driven-design-ddd-principles-fr43)
+      - [Optimization Engine (FR44-FR58)](./2-requirements.md#optimization-engine-fr44-fr58)
+      - [PDF Catalogue Processing (FR59-FR65)](./2-requirements.md#pdf-catalogue-processing-fr59-fr65)
+      - [Manual Price Entry (FR66-FR70)](./2-requirements.md#manual-price-entry-fr66-fr70)
+      - [Social Media Crowdsourcing (FR71-FR105)](./2-requirements.md#social-media-crowdsourcing-fr71-fr105)
+    - [2.2 Non-Functional Requirements](./2-requirements.md#22-non-functional-requirements)
+      - [Performance (NFR1-NFR5)](./2-requirements.md#performance-nfr1-nfr5)
+      - [Scalability (NFR6-NFR10)](./2-requirements.md#scalability-nfr6-nfr10)
+      - [Cost Constraints (NFR11-NFR13)](./2-requirements.md#cost-constraints-nfr11-nfr13)
+      - [Reliability & Resilience (NFR14-NFR18)](./2-requirements.md#reliability-resilience-nfr14-nfr18)
+      - [Security & Privacy (NFR19-NFR28)](./2-requirements.md#security-privacy-nfr19-nfr28)
+      - [Domain-Driven Design (DDD) Architecture (NFR29-NFR33)](./2-requirements.md#domain-driven-design-ddd-architecture-nfr29-nfr33)
+      - [Data Quality & Integrity (NFR34-NFR37)](./2-requirements.md#data-quality-integrity-nfr34-nfr37)
+      - [Accessibility (NFR38-NFR41)](./2-requirements.md#accessibility-nfr38-nfr41)
+      - [Social Crowdsourcing Quality (NFR42-NFR53)](./2-requirements.md#social-crowdsourcing-quality-nfr42-nfr53)
+  - [3. User Interface Design Goals](./3-user-interface-design-goals.md)
+    - [3.1 Overall UX Vision](./3-user-interface-design-goals.md#31-overall-ux-vision)
+    - [3.2 Key Interaction Paradigms](./3-user-interface-design-goals.md#32-key-interaction-paradigms)
+    - [3.3 Core Screens and Views](./3-user-interface-design-goals.md#33-core-screens-and-views)
+    - [3.4 Branding](./3-user-interface-design-goals.md#34-branding)
+    - [3.5 Accessibility](./3-user-interface-design-goals.md#35-accessibility)
+    - [3.6 Target Device and Platforms](./3-user-interface-design-goals.md#36-target-device-and-platforms)
+  - [4. Technical Assumptions](./4-technical-assumptions.md)
+    - [4.1 Repository Structure: Monorepo (Nrwl Nx)](./4-technical-assumptions.md#41-repository-structure-monorepo-nrwl-nx)
+    - [4.2 Service Architecture: Modular Monolith with Clear Bounded Contexts (DDD)](./4-technical-assumptions.md#42-service-architecture-modular-monolith-with-clear-bounded-contexts-ddd)
+    - [4.3 Frontend Architecture](./4-technical-assumptions.md#43-frontend-architecture)
+    - [4.4 Database & Data Layer](./4-technical-assumptions.md#44-database-data-layer)
+    - [4.5 API Design](./4-technical-assumptions.md#45-api-design)
+    - [4.6 Authentication & Authorization](./4-technical-assumptions.md#46-authentication-authorization)
+    - [4.7 Testing Requirements](./4-technical-assumptions.md#47-testing-requirements)
+    - [4.8 Deployment & Infrastructure](./4-technical-assumptions.md#48-deployment-infrastructure)
+    - [4.9 Performance Requirements](./4-technical-assumptions.md#49-performance-requirements)
+    - [4.10 Security Requirements](./4-technical-assumptions.md#410-security-requirements)
+  - [5. Epic List](./5-epic-list.md)
+    - [Epic 1: Foundation & Authentication Infrastructure](./5-epic-list.md#epic-1-foundation-authentication-infrastructure)
+    - [Epic 2: Retailer Management & Dynamic Configuration](./5-epic-list.md#epic-2-retailer-management-dynamic-configuration)
+    - [Epic 3: Category System & Shopping List Management](./5-epic-list.md#epic-3-category-system-shopping-list-management)
+    - [Epic 4: Optimization Engine & Persona-Driven Recommendations](./5-epic-list.md#epic-4-optimization-engine-persona-driven-recommendations)
+    - [Epic 5: PDF Catalogue Processing & Manual Price Entry](./5-epic-list.md#epic-5-pdf-catalogue-processing-manual-price-entry)
+    - [Epic 6: Social Media Crowdsourcing & Image OCR](./5-epic-list.md#epic-6-social-media-crowdsourcing-image-ocr)
+    - [Epic 7: Onboarding & Persona Selection](./5-epic-list.md#epic-7-onboarding-persona-selection)
+    - [Epic 8: UI/UX Polish & Accessibility](./5-epic-list.md#epic-8-uiux-polish-accessibility)
+    - [Epic Summary Table](./5-epic-list.md#epic-summary-table)
+  - [6. Epic Details](./6-epic-details.md)
+    - [Epic 1: Foundation & Authentication Infrastructure](./6-epic-details.md#epic-1-foundation-authentication-infrastructure)
+      - [Story 1.1: Initialize Nx Monorepo with Core Applications](./6-epic-details.md#story-11-initialize-nx-monorepo-with-core-applications)
+      - [Story 1.2: Configure Tailwind CSS v4 and Shadcn UI](./6-epic-details.md#story-12-configure-tailwind-css-v4-and-shadcn-ui)
+      - [Story 1.3: Set Up Supabase Postgres Database and Prisma ORM](./6-epic-details.md#story-13-set-up-supabase-postgres-database-and-prisma-orm)
+  - [7. Checklist Results Report](./7-checklist-results-report.md)
+    - [Executive Summary](./7-checklist-results-report.md#executive-summary)
+    - [Category Analysis Table](./7-checklist-results-report.md#category-analysis-table)
+    - [Top Issues by Priority](./7-checklist-results-report.md#top-issues-by-priority)
+    - [MVP Scope Assessment](./7-checklist-results-report.md#mvp-scope-assessment)
+    - [Technical Readiness](./7-checklist-results-report.md#technical-readiness)
+    - [Final Decision](./7-checklist-results-report.md#final-decision)
+  - [8. Next Steps](./8-next-steps.md)
+    - [8.1 UX Expert Prompt](./8-next-steps.md#81-ux-expert-prompt)
+    - [8.2 Architect Prompt](./8-next-steps.md#82-architect-prompt)
