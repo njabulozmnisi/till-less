@@ -21,12 +21,12 @@ cardNumber String // Stored as base64-encoded ciphertext
 
 ## 9.2 Migration Strategy
 
-**Initial Migration:** (`packages/database/prisma/migrations/001_init/migration.sql`)
+**Initial Migration:** (`libs/database/prisma/migrations/001_init/migration.sql`)
 - Creates all tables with proper constraints
 - Seeds initial 5-8 Level 1 categories
 - Seeds 200+ common SA products
 
-**Seed Data:** (`packages/database/prisma/seed.ts`)
+**Seed Data:** (`libs/database/prisma/seed.ts`)
 ```typescript
 const categories = [
   { name: 'Dairy & Eggs', level: 1, icon: '🥛' },

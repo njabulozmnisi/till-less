@@ -13,9 +13,8 @@ nx run-many --target=test --all
 nx run-many --target=lint --all
 
 # Database migrations
-cd packages/database
-npx prisma migrate dev
-npx prisma generate
+nx run database:prisma-migrate
+nx run database:prisma-generate
 ```
 
 ## 13.2 Git Flow

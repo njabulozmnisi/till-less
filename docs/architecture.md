@@ -124,21 +124,16 @@ tillless/
 ├── apps/
 │   ├── web/                    # Next.js 15 PWA (primary user interface)
 │   ├── api/                    # NestJS backend (tRPC + REST)
-│   └── mobile/                 # Expo React Native (Phase 1.5)
-├── packages/
-│   ├── ui/                     # Shared Shadcn UI + NativeWind components
-│   ├── api-client/             # tRPC client, generated types
-│   ├── database/               # Prisma schema, migrations, seed data
-│   ├── types/                  # Shared TypeScript types, Zod schemas
-│   └── utils/                  # Business logic, formatters, validators
+│   ├── admin/                  # Admin dashboard
+│   └── backend/                # Additional backend services
 ├── libs/
-│   ├── optimization-engine/    # Category optimization algorithms
-│   ├── retailer-adapters/      # Data acquisition strategies
-│   └── auth/                   # Shared auth utilities
-├── tools/
-│   └── scripts/                # DB seeding, migrations, dev tooling
+│   ├── database/               # Prisma schema, migrations, seed data
+│   ├── scrapers/               # Data acquisition strategies
+│   ├── ocr/                    # OCR processing utilities
+│   └── shared/                 # Shared types, utils, constants
 ├── nx.json                     # Nx workspace config
 ├── package.json                # Root dependencies
+├── pnpm-workspace.yaml         # pnpm workspace configuration
 └── tsconfig.base.json          # Base TypeScript config with path aliases
 ```
 
@@ -786,12 +781,12 @@ cardNumber String // Stored as base64-encoded ciphertext
 
 ### 9.2 Migration Strategy
 
-**Initial Migration:** (`packages/database/prisma/migrations/001_init/migration.sql`)
+**Initial Migration:** (`libs/database/prisma/migrations/001_init/migration.sql`)
 - Creates all tables with proper constraints
 - Seeds initial 5-8 Level 1 categories
 - Seeds 200+ common SA products
 
-**Seed Data:** (`packages/database/prisma/seed.ts`)
+**Seed Data:** (`libs/database/prisma/seed.ts`)
 ```typescript
 const categories = [
   { name: 'Dairy & Eggs', level: 1, icon: '🥛' },
@@ -938,11 +933,13 @@ export class AppModule {}
 {
   "compilerOptions": {
     "paths": {
-      "@tillless/ui": ["packages/ui/src/index.ts"],
-      "@tillless/api-client": ["packages/api-client/src/index.ts"],
-      "@tillless/database": ["packages/database/src/index.ts"],
-      "@tillless/types": ["packages/types/src/index.ts"],
-      "@tillless/utils": ["packages/utils/src/index.ts"]
+      "@tillless/database": ["libs/database/src/index.ts"],
+      "@tillless/scrapers": ["libs/scrapers/src/index.ts"],
+      "@tillless/ocr": ["libs/ocr/src/index.ts"],
+      "@tillless/shared": ["libs/shared/src/index.ts"],
+      "@tillless/shared/types": ["libs/shared/src/types/index.ts"],
+      "@tillless/shared/utils": ["libs/shared/src/utils/index.ts"],
+      "@tillless/shared/constants": ["libs/shared/src/constants/index.ts"]
     }
   }
 }
@@ -963,9 +960,8 @@ nx run-many --target=test --all
 nx run-many --target=lint --all
 
 # Database migrations
-cd packages/database
-npx prisma migrate dev
-npx prisma generate
+nx run database:prisma-migrate
+nx run database:prisma-generate
 ```
 
 ### 13.2 Git Flow
@@ -1071,7 +1067,7 @@ CMD ["node", "main.js"]
 ### 16.1 Unit Tests (Vitest)
 
 ```typescript
-// packages/utils/src/categorizer.test.ts
+// libs/shared/src/utils/categorizer.test.ts
 describe('ProductCategorizer', () => {
   it('should categorize milk as dairy', () => {
     const result = categorize('milk');

@@ -53,21 +53,16 @@ tillless/
 ├── apps/
 │   ├── web/                    # Next.js 15 PWA (primary user interface)
 │   ├── api/                    # NestJS backend (tRPC + REST)
-│   └── mobile/                 # Expo React Native (Phase 1.5)
-├── packages/
-│   ├── ui/                     # Shared Shadcn UI + NativeWind components
-│   ├── api-client/             # tRPC client, generated types
-│   ├── database/               # Prisma schema, migrations, seed data
-│   ├── types/                  # Shared TypeScript types, Zod schemas
-│   └── utils/                  # Business logic, formatters, validators
+│   ├── admin/                  # Admin dashboard
+│   └── backend/                # Additional backend services
 ├── libs/
-│   ├── optimization-engine/    # Category optimization algorithms
-│   ├── retailer-adapters/      # Data acquisition strategies
-│   └── auth/                   # Shared auth utilities
-├── tools/
-│   └── scripts/                # DB seeding, migrations, dev tooling
+│   ├── database/               # Prisma schema, migrations, seed data
+│   ├── scrapers/               # Data acquisition strategies
+│   ├── ocr/                    # OCR processing utilities
+│   └── shared/                 # Shared types, utils, constants
 ├── nx.json                     # Nx workspace config
 ├── package.json                # Root dependencies
+├── pnpm-workspace.yaml         # pnpm workspace configuration
 └── tsconfig.base.json          # Base TypeScript config with path aliases
 ```
 

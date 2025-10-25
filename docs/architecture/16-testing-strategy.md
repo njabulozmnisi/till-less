@@ -3,7 +3,7 @@
 ## 16.1 Unit Tests (Vitest)
 
 ```typescript
-// packages/utils/src/categorizer.test.ts
+// libs/shared/src/utils/categorizer.test.ts
 describe('ProductCategorizer', () => {
   it('should categorize milk as dairy', () => {
     const result = categorize('milk');
