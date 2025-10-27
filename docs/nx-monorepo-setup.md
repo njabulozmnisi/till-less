@@ -12,19 +12,19 @@
 ```
 tillless/
 ├── apps/
-│   ├── web/                 # Next.js 14+ frontend
-│   ├── api/                 # NestJS backend
-│   └── admin/               # Admin panel
+│   ├── web/                 # Next.js 15 frontend (includes /admin routes)
+│   └── api/                 # NestJS backend (all backend services)
 ├── libs/
 │   ├── database/            # Prisma schema + client
 │   ├── shared/              # Types, utils, constants
 │   ├── scrapers/            # Playwright workers
-│   ├── ocr/                 # Azure OCR + Tesseract
-│   └── config/              # Shared configs
+│   └── ocr/                 # Azure OCR + Tesseract
 ├── docs/                    # All documentation
 ├── tools/                   # Build scripts
 └── .github/workflows/       # CI/CD
 ```
+
+**Note:** `apps/admin` was consolidated into `apps/web/app/admin/*` (Issue #10). `apps/backend` was removed as redundant (Issue #12).
 
 ### 2. **Configuration Files Created**
 
@@ -47,8 +47,7 @@ Each app has:
 
 **Apps configured:**
 1. `apps/web` - Next.js frontend (port 3000) - includes /admin routes
-2. `apps/api` - NestJS backend (port 3001)
-3. `apps/backend` - Additional backend services
+2. `apps/api` - NestJS backend (port 3001) - all backend services
 
 #### Library Configurations (5 libraries)
 Each library has:
@@ -302,9 +301,8 @@ nx graph
 ```
 
 **Expected dependencies:**
-- `web` → depends on `database`, `shared`
+- `web` → depends on `database`, `shared` (includes /admin routes)
 - `api` → depends on `database`, `shared`, `scrapers`, `ocr`
-- `admin` → depends on `database`, `shared`, `ocr`
 - `scrapers` → depends on `database`, `shared`
 - `ocr` → depends on `shared`
 
@@ -354,8 +352,8 @@ pnpm nx run database:seed
 Before starting Week 1 development, verify:
 
 - [ ] Nx workspace initialized (`nx.json` exists)
-- [ ] All apps have `project.json` files (web, api, admin)
-- [ ] All libs have `project.json` files (database, scrapers, ocr, shared, config)
+- [ ] All apps have `project.json` files (web, api)
+- [ ] All libs have `project.json` files (database, scrapers, ocr, shared)
 - [ ] `pnpm-workspace.yaml` configured
 - [ ] `tsconfig.base.json` has path aliases (@tillless/*)
 - [ ] `.gitignore` includes Nx cache (`.nx/cache`)
@@ -371,7 +369,7 @@ Before starting Week 1 development, verify:
 
 **Monorepo Setup Status:** ✅ **COMPLETE**
 
-- **Folder structure:** 3 apps + 5 libraries created
+- **Folder structure:** 2 apps + 4 libraries (simplified via Issues #10, #12)
 - **Configuration files:** 30+ files created (nx.json, project.json, package.json, tsconfig.json, etc.)
 - **Documentation:** Updated 3 docs, created 1 comprehensive README.md
 - **Time to complete:** ~2 hours
