@@ -122,9 +122,8 @@ TillLess implements a **modular monolith architecture** with Domain-Driven Desig
 ```
 tillless/
 ├── apps/
-│   ├── web/                    # Next.js 15 PWA (primary user interface)
+│   ├── web/                    # Next.js 15 PWA (includes /admin routes)
 │   ├── api/                    # NestJS backend (tRPC + REST)
-│   ├── admin/                  # Admin dashboard
 │   └── backend/                # Additional backend services
 ├── libs/
 │   ├── database/               # Prisma schema, migrations, seed data

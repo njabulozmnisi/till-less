@@ -29,17 +29,15 @@ This project uses **Nx** for monorepo management with **pnpm** workspaces.
 ```
 tillless/
 ├── apps/
-│   ├── web/                 # Next.js 14+ frontend (Vercel)
+│   ├── web/                 # Next.js 15 frontend (includes /admin routes)
 │   ├── api/                 # NestJS backend API (Railway)
-│   └── admin/               # Admin panel (leaflet entry, OCR review)
+│   └── backend/             # Additional backend services
 ├── libs/
 │   ├── database/            # Prisma schema + database client
 │   ├── shared/              # Shared TypeScript types, utils, constants
 │   ├── scrapers/            # Playwright scraper workers (Railway)
-│   ├── ocr/                 # Azure OCR + Tesseract services
-│   └── config/              # Shared ESLint, Prettier, tsconfig
+│   └── ocr/                 # Azure OCR + Tesseract services
 ├── docs/                    # All documentation
-├── tools/                   # Build scripts, generators
 ├── nx.json                  # Nx workspace configuration
 ├── package.json             # Root dependencies
 └── pnpm-workspace.yaml      # pnpm workspaces config
@@ -88,7 +86,8 @@ pnpm dev
 # Or run individually
 pnpm nx serve web      # Frontend at http://localhost:3000
 pnpm nx serve api      # Backend at http://localhost:3001
-pnpm nx serve admin    # Admin panel at http://localhost:3002
+
+# Admin features accessible at http://localhost:3000/admin
 
 # Build all projects
 pnpm build

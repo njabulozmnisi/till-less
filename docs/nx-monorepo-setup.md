@@ -46,9 +46,9 @@ Each app has:
 - ✅ `README.md` - App-specific documentation
 
 **Apps configured:**
-1. `apps/web` - Next.js frontend (port 3000)
+1. `apps/web` - Next.js frontend (port 3000) - includes /admin routes
 2. `apps/api` - NestJS backend (port 3001)
-3. `apps/admin` - Admin panel (port 3002)
+3. `apps/backend` - Additional backend services
 
 #### Library Configurations (5 libraries)
 Each library has:
@@ -155,9 +155,8 @@ pnpm nx run database:seed
 pnpm dev
 
 # Or run individually
-pnpm nx serve web      # http://localhost:3000
+pnpm nx serve web      # http://localhost:3000 (admin at /admin)
 pnpm nx serve api      # http://localhost:3001
-pnpm nx serve admin    # http://localhost:3002
 ```
 
 ---
@@ -168,9 +167,8 @@ pnpm nx serve admin    # http://localhost:3002
 
 ```bash
 # Serve (dev mode)
-nx serve web              # Run web app
+nx serve web              # Run web app (includes /admin routes)
 nx serve api              # Run API
-nx serve admin            # Run admin panel
 
 # Build
 nx build web              # Build for production
