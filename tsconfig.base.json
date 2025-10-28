@@ -30,8 +30,11 @@
       "@tillless/shared/types": ["libs/shared/src/types/index.ts"],
       "@tillless/shared/utils": ["libs/shared/src/utils/index.ts"],
       "@tillless/ui": ["libs/ui/src/index.ts"],
+      "@tillless/ui/components": ["libs/ui/src/components/index.ts"],
       "@tillless/ui/components/*": ["libs/ui/src/components/*"],
+      "@tillless/ui/lib": ["libs/ui/src/lib/index.ts"],
       "@tillless/ui/lib/*": ["libs/ui/src/lib/*"],
+      "@tillless/ui/hooks": ["libs/ui/src/hooks/index.ts"],
       "@tillless/ui/hooks/*": ["libs/ui/src/hooks/*"]
     }
   },
