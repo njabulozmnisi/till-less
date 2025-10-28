@@ -1,7 +1,7 @@
 "use client"
 
 import { useTheme } from "next-themes"
-import { Button } from "@/components/ui/button"
+import { Button } from "./button"
 
 export function ThemeToggle(): JSX.Element {
   const { theme, setTheme } = useTheme()
