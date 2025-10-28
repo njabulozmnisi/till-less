@@ -1,8 +1,8 @@
-import { ThemeToggle } from '@/components/theme-toggle';
-import { Button } from '@/components/ui/button';
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+import { ThemeToggle } from '@tillless/ui/components/theme-toggle';
+import { Button } from '@tillless/ui/components/button';
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from '@tillless/ui/components/card';
+import { Badge } from '@tillless/ui/components/badge';
+import { Alert, AlertTitle, AlertDescription } from '@tillless/ui/components/alert';
 
 export default function TestComponentsPage(): JSX.Element {
   return (
