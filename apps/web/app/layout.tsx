@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { ThemeProvider } from '@/components/theme-provider';
+import { ThemeProvider } from '@tillless/ui/components/theme-provider';
 
 export const metadata: Metadata = {
   title: 'TillLess',

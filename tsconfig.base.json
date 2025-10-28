@@ -23,12 +23,16 @@
     "baseUrl": ".",
     "paths": {
       "@tillless/database": ["libs/database/src/index.ts"],
-      "@tillless/scrapers": ["libs/scrapers/src/index.ts"],
       "@tillless/ocr": ["libs/ocr/src/index.ts"],
+      "@tillless/scrapers": ["libs/scrapers/src/index.ts"],
       "@tillless/shared": ["libs/shared/src/index.ts"],
+      "@tillless/shared/constants": ["libs/shared/src/constants/index.ts"],
       "@tillless/shared/types": ["libs/shared/src/types/index.ts"],
       "@tillless/shared/utils": ["libs/shared/src/utils/index.ts"],
-      "@tillless/shared/constants": ["libs/shared/src/constants/index.ts"]
+      "@tillless/ui": ["libs/ui/src/index.ts"],
+      "@tillless/ui/components/*": ["libs/ui/src/components/*"],
+      "@tillless/ui/lib/*": ["libs/ui/src/lib/*"],
+      "@tillless/ui/hooks/*": ["libs/ui/src/hooks/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]
