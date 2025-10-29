@@ -1,5 +1,9 @@
 // OCR library main entry point
-export * from './azure-ocr.service';
-export * from './tesseract.service';
-export * from './parser';
-export * from './types';
+// TODO: Implement OCR services
+// export * from './azure-ocr.service';
+// export * from './tesseract.service';
+// export * from './parser';
+// export * from './types';
+
+// Empty export to make this a valid module
+export {};

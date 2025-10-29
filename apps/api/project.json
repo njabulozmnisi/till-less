@@ -6,14 +6,17 @@
   "tags": ["type:app", "scope:backend"],
   "targets": {
     "build": {
-      "executor": "@nx/nest:build",
+      "executor": "@nx/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "defaultConfiguration": "production",
       "options": {
+        "target": "node",
+        "compiler": "tsc",
         "outputPath": "dist/apps/api",
         "main": "apps/api/src/main.ts",
         "tsConfig": "apps/api/tsconfig.app.json",
         "assets": ["apps/api/src/assets"],
+        "isolatedConfig": true,
         "webpackConfig": "apps/api/webpack.config.js"
       },
       "configurations": {
@@ -32,7 +35,7 @@
       }
     },
     "serve": {
-      "executor": "@nx/nest:serve",
+      "executor": "@nx/js:node",
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "api:build",
