@@ -71,7 +71,12 @@ cp .env.example .env
 pnpm nx run database:prisma-generate
 
 # Run database migrations
+
+
 pnpm nx run database:prisma-migrate
+
+r
+
 
 # Seed database with sample products
 pnpm nx run database:seed
@@ -160,34 +165,54 @@ nx generate @nx/next:application my-app --directory=apps/my-app
 ### 1. Create Supabase Project
 
 1. Go to https://supabase.com/dashboard
-2. Create new project (note the connection string)
-3. Enable pg-boss extension:
-   ```sql
-   CREATE EXTENSION IF NOT EXISTS pg_boss;
-   ```
+2. Create new project:
+   - **Name:** `tillless` or `tillless-dev`
+   - **Region:** EU (Frankfurt or London - closest to South Africa)
+   - **Database Password:** Save this securely
+3. Wait ~2 minutes for provisioning
+4. Navigate to: **Project Settings → Database**
+5. Copy the **Connection String** (Transaction/Direct mode, port 5432)
 
 ### 2. Configure Environment Variables
 
+Add to `.env`:
 ```bash
-# .env
-DATABASE_URL="postgresql://postgres:[password]@[host]:5432/postgres"
+# Database connection with pooling optimization (Supabase free tier)
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=5"
 ```
+
+**Connection Format Notes:**
+- Use `pgbouncer=true` for connection pooling
+- Limit connections to 5 (Supabase free tier optimization)
+- Do NOT use session pooler (port 6543) for migrations
 
 ### 3. Run Migrations
 
 ```bash
-# Generate Prisma client
+# Generate Prisma client (creates TypeScript types)
 pnpm nx run database:prisma-generate
 
-# Create migration
+# Create and apply migration (development)
 pnpm nx run database:prisma-migrate
+# When prompted, name migration (e.g., "init")
 
-# Deploy migration (production)
+# Deploy migration (production - Railway/CI)
 pnpm nx run database:prisma-deploy
 
 # Seed database (50 common SA products)
 pnpm nx run database:seed
 ```
+
+### 4. Verify Database Connection
+
+After running migrations, check Supabase dashboard:
+- Navigate to: **Table Editor**
+- Verify tables exist: `users`, `retailers`, `stores`, `loyalty_programs`, `products`, `retailer_items`
+
+**Monitoring:**
+- Free tier limits: 500MB database, 1GB storage, 2GB bandwidth/month
+- Monitor usage in Supabase dashboard → Usage
+- Connection pooling reduces connection overhead
 
 ---
 
