@@ -75,9 +75,56 @@ async function seedRetailers() {
   console.log('✓ Retailers seeded successfully\n');
 }
 
+async function seedIngestionConfigs() {
+  console.log('Seeding ingestion configs...');
+
+  // Get Checkers retailer
+  const checkersRetailer = await prisma.retailer.findUnique({
+    where: { slug: 'checkers' },
+  });
+
+  if (!checkersRetailer) {
+    console.log('  ⚠ Checkers retailer not found, skipping ingestion config seed');
+    return;
+  }
+
+  const ingestionConfig = {
+    name: 'Checkers Sixty60 Product Scraper',
+    strategy: 'SCRAPER' as const,
+    config: {
+      url: 'https://www.sixty60.co.za/products',
+      selectors: {
+        productContainer: '.product-card',
+        name: '.product-name',
+        price: '.product-price',
+        inStock: '.stock-status',
+        image: '.product-image img',
+      },
+    },
+    schedule: '0 */6 * * *', // Every 6 hours
+    isActive: false, // Disabled by default for safety
+    retailerId: checkersRetailer.id,
+  };
+
+  await prisma.retailerIngestionConfig.upsert({
+    where: {
+      retailerId_name: {
+        retailerId: checkersRetailer.id,
+        name: ingestionConfig.name,
+      },
+    },
+    update: ingestionConfig,
+    create: ingestionConfig,
+  });
+
+  console.log(`  ✓ Upserted ingestion config: ${ingestionConfig.name}`);
+  console.log('✓ Ingestion configs seeded successfully\n');
+}
+
 async function main() {
   try {
     await seedRetailers();
+    await seedIngestionConfigs();
     console.log('🌱 Seed completed successfully!');
   } catch (error) {
     console.error('❌ Seed failed:', error);
