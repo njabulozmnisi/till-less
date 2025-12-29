@@ -216,6 +216,68 @@ After running migrations, check Supabase dashboard:
 
 ---
 
+## 🔐 Authentication
+
+TillLess uses JWT-based authentication with BetterAuth and NestJS.
+
+### Setup Authentication
+
+1. **Generate Auth Secret:**
+```bash
+openssl rand -base64 32
+```
+
+2. **Add to `.env`:**
+```bash
+BETTER_AUTH_SECRET="your-generated-secret"
+BETTER_AUTH_URL="http://localhost:3001/api/auth"
+```
+
+3. **Add to `apps/web/.env.local`:**
+```bash
+NEXT_PUBLIC_AUTH_URL="http://localhost:3001/api/auth"
+```
+
+### Authentication Flow
+
+**Backend (NestJS):**
+- `POST /api/auth/register` - Create new user account
+- `POST /api/auth/login` - Authenticate and receive JWT token
+- `POST /api/auth/logout` - Logout (client-side token removal)
+- `GET /api/auth/me` - Get current user profile (protected)
+
+**Frontend (Next.js):**
+- `/register` - User registration page
+- `/login` - User login page
+- `/dashboard` - Protected dashboard (requires authentication)
+
+**Tech Stack:**
+- Password Hashing: bcrypt (12 salt rounds)
+- JWT Tokens: 7-day expiry
+- State Management: Redux Toolkit + RTK Query
+- Token Storage: localStorage (client-side)
+- **User Roles**: Array-based roles (USER, ADMIN, SUPER_ADMIN) - users can have multiple roles
+
+### Testing Authentication
+
+```bash
+# Register new user
+curl -X POST http://localhost:3001/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123","name":"Test User"}'
+
+# Login
+curl -X POST http://localhost:3001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
+
+# Get profile (use token from login response)
+curl -X GET http://localhost:3001/api/auth/me \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+---
+
 ## 🔑 Environment Variables
 
 Create a `.env` file in the root with:
@@ -223,6 +285,10 @@ Create a `.env` file in the root with:
 ```bash
 # Database (Supabase)
 DATABASE_URL="postgresql://postgres:[password]@[host]:5432/postgres"
+
+# Authentication (BetterAuth)
+BETTER_AUTH_SECRET="your-32-char-secret"  # Generate: openssl rand -base64 32
+BETTER_AUTH_URL="http://localhost:3001/api/auth"
 
 # Azure Computer Vision (OCR - Week 4)
 AZURE_COMPUTER_VISION_KEY="your-azure-key"
