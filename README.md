@@ -71,7 +71,12 @@ cp .env.example .env
 pnpm nx run database:prisma-generate
 
 # Run database migrations
+
+
 pnpm nx run database:prisma-migrate
+
+r
+
 
 # Seed database with sample products
 pnpm nx run database:seed
@@ -160,33 +165,115 @@ nx generate @nx/next:application my-app --directory=apps/my-app
 ### 1. Create Supabase Project
 
 1. Go to https://supabase.com/dashboard
-2. Create new project (note the connection string)
-3. Enable pg-boss extension:
-   ```sql
-   CREATE EXTENSION IF NOT EXISTS pg_boss;
-   ```
+2. Create new project:
+   - **Name:** `tillless` or `tillless-dev`
+   - **Region:** EU (Frankfurt or London - closest to South Africa)
+   - **Database Password:** Save this securely
+3. Wait ~2 minutes for provisioning
+4. Navigate to: **Project Settings → Database**
+5. Copy the **Connection String** (Transaction/Direct mode, port 5432)
 
 ### 2. Configure Environment Variables
 
+Add to `.env`:
 ```bash
-# .env
-DATABASE_URL="postgresql://postgres:[password]@[host]:5432/postgres"
+# Database connection with pooling optimization (Supabase free tier)
+DATABASE_URL="postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:5432/postgres?pgbouncer=true&connection_limit=5"
 ```
+
+**Connection Format Notes:**
+- Use `pgbouncer=true` for connection pooling
+- Limit connections to 5 (Supabase free tier optimization)
+- Do NOT use session pooler (port 6543) for migrations
 
 ### 3. Run Migrations
 
 ```bash
-# Generate Prisma client
+# Generate Prisma client (creates TypeScript types)
 pnpm nx run database:prisma-generate
 
-# Create migration
+# Create and apply migration (development)
 pnpm nx run database:prisma-migrate
+# When prompted, name migration (e.g., "init")
 
-# Deploy migration (production)
+# Deploy migration (production - Railway/CI)
 pnpm nx run database:prisma-deploy
 
 # Seed database (50 common SA products)
 pnpm nx run database:seed
+```
+
+### 4. Verify Database Connection
+
+After running migrations, check Supabase dashboard:
+- Navigate to: **Table Editor**
+- Verify tables exist: `users`, `retailers`, `stores`, `loyalty_programs`, `products`, `retailer_items`
+
+**Monitoring:**
+- Free tier limits: 500MB database, 1GB storage, 2GB bandwidth/month
+- Monitor usage in Supabase dashboard → Usage
+- Connection pooling reduces connection overhead
+
+---
+
+## 🔐 Authentication
+
+TillLess uses JWT-based authentication with BetterAuth and NestJS.
+
+### Setup Authentication
+
+1. **Generate Auth Secret:**
+```bash
+openssl rand -base64 32
+```
+
+2. **Add to `.env`:**
+```bash
+BETTER_AUTH_SECRET="your-generated-secret"
+BETTER_AUTH_URL="http://localhost:3001/api/auth"
+```
+
+3. **Add to `apps/web/.env.local`:**
+```bash
+NEXT_PUBLIC_AUTH_URL="http://localhost:3001/api/auth"
+```
+
+### Authentication Flow
+
+**Backend (NestJS):**
+- `POST /api/auth/register` - Create new user account
+- `POST /api/auth/login` - Authenticate and receive JWT token
+- `POST /api/auth/logout` - Logout (client-side token removal)
+- `GET /api/auth/me` - Get current user profile (protected)
+
+**Frontend (Next.js):**
+- `/register` - User registration page
+- `/login` - User login page
+- `/dashboard` - Protected dashboard (requires authentication)
+
+**Tech Stack:**
+- Password Hashing: bcrypt (12 salt rounds)
+- JWT Tokens: 7-day expiry
+- State Management: Redux Toolkit + RTK Query
+- Token Storage: localStorage (client-side)
+- **User Roles**: Array-based roles (USER, ADMIN, SUPER_ADMIN) - users can have multiple roles
+
+### Testing Authentication
+
+```bash
+# Register new user
+curl -X POST http://localhost:3001/api/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123","name":"Test User"}'
+
+# Login
+curl -X POST http://localhost:3001/api/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"test@example.com","password":"password123"}'
+
+# Get profile (use token from login response)
+curl -X GET http://localhost:3001/api/auth/me \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
 ```
 
 ---
@@ -198,6 +285,10 @@ Create a `.env` file in the root with:
 ```bash
 # Database (Supabase)
 DATABASE_URL="postgresql://postgres:[password]@[host]:5432/postgres"
+
+# Authentication (BetterAuth)
+BETTER_AUTH_SECRET="your-32-char-secret"  # Generate: openssl rand -base64 32
+BETTER_AUTH_URL="http://localhost:3001/api/auth"
 
 # Azure Computer Vision (OCR - Week 4)
 AZURE_COMPUTER_VISION_KEY="your-azure-key"

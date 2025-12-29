@@ -1,6 +1,7 @@
 import './globals.css';
 import type { Metadata } from 'next';
 import { ThemeProvider } from '@tillless/ui/components';
+import { ReduxProvider } from '../src/components/providers/ReduxProvider';
 
 export const metadata: Metadata = {
   title: 'TillLess',
@@ -15,14 +16,16 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
+        <ReduxProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            {children}
+          </ThemeProvider>
+        </ReduxProvider>
       </body>
     </html>
   );
