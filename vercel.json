@@ -1,0 +1,9 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "pnpm nx build web",
+  "devCommand": "pnpm nx serve web",
+  "installCommand": "pnpm install",
+  "framework": "nextjs",
+  "outputDirectory": "dist/apps/web/.next",
+  "ignoreCommand": "git diff --quiet HEAD^ HEAD ./apps/web ./libs"
+}
