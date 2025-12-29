@@ -2,13 +2,13 @@ import { IsString, IsOptional, IsBoolean, IsEmail, IsUrl } from 'class-validator
 
 export class CreateRetailerDto {
   @IsString()
-  slug: string;
+  slug!: string;
 
   @IsString()
-  name: string;
+  name!: string;
 
   @IsString()
-  displayName: string;
+  displayName!: string;
 
   @IsOptional()
   @IsBoolean()
