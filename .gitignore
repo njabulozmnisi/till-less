@@ -64,6 +64,10 @@ prisma/migrations/migration_lock.toml
 # Railway
 .railway
 
+# Sentry
+.sentryclirc
+sentry.properties
+
 # Logs
 *.log
 logs
