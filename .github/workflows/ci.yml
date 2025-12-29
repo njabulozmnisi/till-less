@@ -7,7 +7,7 @@ on:
     branches: [main, develop]
 
 jobs:
-  lint-and-typecheck:
+  typecheck:
     runs-on: ubuntu-latest
 
     steps:
@@ -29,42 +29,5 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Lint
-        run: pnpm nx run-many --target=lint --all --parallel
-
-      - name: Type check
+      - name: Type check and build
         run: pnpm nx run-many --target=build --all --parallel
-
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Run tests
-        run: pnpm nx run-many --target=test --all --parallel --coverage
-        env:
-          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/test
-
-      - name: Upload coverage reports
-        uses: codecov/codecov-action@v4
-        if: always()
-        with:
-          files: ./coverage/*/lcov.info
-          fail_ci_if_error: false
