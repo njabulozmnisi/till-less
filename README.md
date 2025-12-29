@@ -278,6 +278,229 @@ curl -X GET http://localhost:3001/api/auth/me \
 
 ---
 
+## 🏪 Retailer Management API
+
+TillLess provides a complete CRUD API for managing retailers. Admin-only endpoints are protected with role-based access control.
+
+### Endpoints
+
+#### GET /api/retailers
+Get all retailers (public endpoint).
+
+**Request:**
+```bash
+curl -X GET http://localhost:3001/api/retailers
+```
+
+**Response:**
+```json
+[
+  {
+    "id": "123e4567-e89b-12d3-a456-426614174000",
+    "slug": "checkers",
+    "name": "Checkers",
+    "displayName": "Checkers Sixty60",
+    "isActive": true,
+    "isVisible": true,
+    "logoUrl": "/logos/checkers.svg",
+    "brandColor": "#00A859",
+    "websiteUrl": "https://www.checkers.co.za",
+    "supportEmail": "support@checkers.co.za",
+    "supportPhone": null,
+    "createdAt": "2025-01-01T00:00:00Z",
+    "updatedAt": "2025-01-01T00:00:00Z",
+    "createdBy": null
+  }
+]
+```
+
+#### GET /api/retailers/:id
+Get a single retailer by ID (public endpoint).
+
+**Request:**
+```bash
+curl -X GET http://localhost:3001/api/retailers/123e4567-e89b-12d3-a456-426614174000
+```
+
+**Response:**
+```json
+{
+  "id": "123e4567-e89b-12d3-a456-426614174000",
+  "slug": "checkers",
+  "name": "Checkers",
+  "displayName": "Checkers Sixty60",
+  "isActive": true,
+  "isVisible": true,
+  "logoUrl": "/logos/checkers.svg",
+  "brandColor": "#00A859",
+  "websiteUrl": "https://www.checkers.co.za",
+  "supportEmail": "support@checkers.co.za",
+  "supportPhone": null,
+  "createdAt": "2025-01-01T00:00:00Z",
+  "updatedAt": "2025-01-01T00:00:00Z",
+  "createdBy": null
+}
+```
+
+#### POST /api/retailers
+Create a new retailer (admin only - requires ADMIN role).
+
+**Request:**
+```bash
+curl -X POST http://localhost:3001/api/retailers \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "slug": "spar",
+    "name": "SPAR",
+    "displayName": "SPAR South Africa",
+    "isActive": true,
+    "isVisible": true,
+    "logoUrl": "/logos/spar.svg",
+    "brandColor": "#006837",
+    "websiteUrl": "https://www.spar.co.za",
+    "supportEmail": "customercare@spar.co.za",
+    "supportPhone": "+27 11 444 5555"
+  }'
+```
+
+**Response:**
+```json
+{
+  "id": "789e4567-e89b-12d3-a456-426614174999",
+  "slug": "spar",
+  "name": "SPAR",
+  "displayName": "SPAR South Africa",
+  "isActive": true,
+  "isVisible": true,
+  "logoUrl": "/logos/spar.svg",
+  "brandColor": "#006837",
+  "websiteUrl": "https://www.spar.co.za",
+  "supportEmail": "customercare@spar.co.za",
+  "supportPhone": "+27 11 444 5555",
+  "createdAt": "2025-01-15T10:30:00Z",
+  "updatedAt": "2025-01-15T10:30:00Z",
+  "createdBy": "admin-user-id"
+}
+```
+
+**Validation:**
+- `slug` (required): Unique identifier, lowercase alphanumeric with hyphens
+- `name` (required): Retailer name
+- `displayName` (required): Display name for UI
+- `supportEmail` (optional): Must be valid email format
+- `websiteUrl` (optional): Must be valid URL format
+- `brandColor` (optional): Hex color code
+
+#### PATCH /api/retailers/:id
+Update an existing retailer (admin only - requires ADMIN role).
+
+**Request:**
+```bash
+curl -X PATCH http://localhost:3001/api/retailers/789e4567-e89b-12d3-a456-426614174999 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "displayName": "SPAR - Better and Better",
+    "supportPhone": "+27 11 444 6666"
+  }'
+```
+
+**Response:**
+```json
+{
+  "id": "789e4567-e89b-12d3-a456-426614174999",
+  "slug": "spar",
+  "name": "SPAR",
+  "displayName": "SPAR - Better and Better",
+  "isActive": true,
+  "isVisible": true,
+  "logoUrl": "/logos/spar.svg",
+  "brandColor": "#006837",
+  "websiteUrl": "https://www.spar.co.za",
+  "supportEmail": "customercare@spar.co.za",
+  "supportPhone": "+27 11 444 6666",
+  "createdAt": "2025-01-15T10:30:00Z",
+  "updatedAt": "2025-01-15T11:00:00Z",
+  "createdBy": "admin-user-id"
+}
+```
+
+#### DELETE /api/retailers/:id
+Soft delete a retailer by setting `isActive: false` (admin only - requires ADMIN role).
+
+**Request:**
+```bash
+curl -X DELETE http://localhost:3001/api/retailers/789e4567-e89b-12d3-a456-426614174999 \
+  -H "Authorization: Bearer YOUR_JWT_TOKEN"
+```
+
+**Response:**
+```json
+{
+  "id": "789e4567-e89b-12d3-a456-426614174999",
+  "slug": "spar",
+  "name": "SPAR",
+  "displayName": "SPAR - Better and Better",
+  "isActive": false,
+  "isVisible": true,
+  "logoUrl": "/logos/spar.svg",
+  "brandColor": "#006837",
+  "websiteUrl": "https://www.spar.co.za",
+  "supportEmail": "customercare@spar.co.za",
+  "supportPhone": "+27 11 444 6666",
+  "createdAt": "2025-01-15T10:30:00Z",
+  "updatedAt": "2025-01-15T11:30:00Z",
+  "createdBy": "admin-user-id"
+}
+```
+
+**Note:** This is a soft delete - the retailer record is not removed from the database, only marked as inactive.
+
+### Authorization
+
+Protected endpoints (POST, PATCH, DELETE) require:
+1. Valid JWT token in `Authorization: Bearer <token>` header
+2. User must have `ADMIN` role in their `roles` array
+
+**Error Responses:**
+- `401 Unauthorized` - Missing or invalid JWT token
+- `403 Forbidden` - User does not have ADMIN role
+- `404 Not Found` - Retailer not found
+- `400 Bad Request` - Validation error (invalid email, missing required fields, etc.)
+
+### Admin UI
+
+Retailers can be managed via the admin interface at:
+- **URL:** `http://localhost:3000/admin/retailers`
+- **Access:** Requires authentication + ADMIN role
+- **Features:**
+  - View all retailers in table format
+  - Create new retailers via dialog
+  - Edit existing retailers
+  - Toggle active/inactive status with optimistic updates
+  - Responsive design with Tailwind CSS
+
+### Seeding Retailers
+
+The database includes a seed script for 5 major South African retailers:
+
+```bash
+# Run seed script
+pnpm nx run database:seed
+```
+
+**Seeded Retailers:**
+1. **Checkers** - Checkers Sixty60 (green #00A859)
+2. **Pick n Pay** - Pick n Pay (red #E31E24)
+3. **Shoprite** - Shoprite (red #E2001A)
+4. **Woolworths** - Woolworths Food (green #009540)
+5. **Makro** - Makro (blue #003087)
+
+The seed script uses `upsert` to prevent duplicates - safe to run multiple times.
+
+---
+
 ## 🔑 Environment Variables
 
 Create a `.env` file in the root with:

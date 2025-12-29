@@ -51,7 +51,7 @@
     "seed": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "ts-node libs/database/prisma/seed.ts"
+        "command": "ts-node libs/database/src/seed.ts"
       }
     }
   }
