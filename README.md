@@ -501,6 +501,268 @@ The seed script uses `upsert` to prevent duplicates - safe to run multiple times
 
 ---
 
+## 🔄 Data Ingestion API
+
+The Data Ingestion API provides automated price collection from retailers using pluggable strategies (web scraping, API integration, manual entry).
+
+### Architecture
+
+The system uses the **Strategy Pattern** for extensible data acquisition:
+
+- **Strategy Interface**: `IDataAcquisitionStrategy` - defines execute(), validate(), getDescription()
+- **Factory Service**: `StrategyFactoryService` - registers and retrieves strategies
+- **Concrete Strategies**:
+  - `ScraperStrategy` - Web scraping using Playwright (currently implemented)
+  - `ApiStrategy` - Direct API integration (future)
+  - `ManualStrategy` - Manual data entry (future)
+
+### Endpoints
+
+All endpoints require authentication. Admin-only endpoints are marked with 🔒.
+
+**Base Path:** `/retailers/:retailerId/ingestion`
+
+#### Get All Ingestion Configs
+
+```bash
+GET /retailers/:retailerId/ingestion
+```
+
+Returns all ingestion configurations for a retailer.
+
+**Response:**
+```json
+[
+  {
+    "id": "uuid",
+    "name": "Checkers Sixty60 Product Scraper",
+    "strategy": "SCRAPER",
+    "config": {
+      "url": "https://www.sixty60.co.za/products",
+      "selectors": {
+        "productContainer": ".product-card",
+        "name": ".product-name",
+        "price": ".product-price",
+        "inStock": ".stock-status",
+        "image": ".product-image img"
+      }
+    },
+    "schedule": "0 */6 * * *",
+    "isActive": false,
+    "lastRun": "2025-01-15T12:00:00Z",
+    "successCount": 42,
+    "failureCount": 1,
+    "retailerId": "retailer-uuid",
+    "createdAt": "2025-01-10T10:00:00Z",
+    "updatedAt": "2025-01-15T12:00:00Z"
+  }
+]
+```
+
+#### Get Single Ingestion Config
+
+```bash
+GET /retailers/:retailerId/ingestion/:id
+```
+
+**Response:** Same structure as array item above.
+
+#### Create Ingestion Config 🔒
+
+```bash
+POST /retailers/:retailerId/ingestion
+Authorization: Bearer <admin-token>
+
+{
+  "name": "Checkers API Scraper",
+  "strategy": "SCRAPER",
+  "config": {
+    "url": "https://www.sixty60.co.za/products",
+    "selectors": {
+      "productContainer": ".product-card",
+      "name": ".product-name",
+      "price": ".product-price",
+      "inStock": ".stock-status",
+      "image": ".product-image img"
+    }
+  },
+  "schedule": "0 */6 * * *",
+  "isActive": false
+}
+```
+
+**Strategy-Specific Config Formats:**
+
+**SCRAPER:**
+```json
+{
+  "url": "https://retailer.com/products",
+  "selectors": {
+    "productContainer": ".product-card",
+    "name": ".product-name",
+    "price": ".product-price",
+    "inStock": ".stock-status",
+    "image": ".product-image img"
+  },
+  "waitForSelector": ".product-card",
+  "timeout": 30000
+}
+```
+
+**API (Future):**
+```json
+{
+  "baseUrl": "https://api.retailer.com",
+  "apiKey": "encrypted-key",
+  "endpoints": {
+    "products": "/v1/products"
+  }
+}
+```
+
+#### Update Ingestion Config 🔒
+
+```bash
+PATCH /retailers/:retailerId/ingestion/:id
+Authorization: Bearer <admin-token>
+
+{
+  "isActive": true,
+  "schedule": "0 */4 * * *"
+}
+```
+
+#### Delete Ingestion Config 🔒
+
+```bash
+DELETE /retailers/:retailerId/ingestion/:id
+Authorization: Bearer <admin-token>
+```
+
+**Response:** Returns the deleted config.
+
+#### Manually Trigger Ingestion 🔒
+
+```bash
+POST /retailers/:retailerId/ingestion/:id/trigger
+Authorization: Bearer <admin-token>
+```
+
+**Response:**
+```json
+{
+  "success": true,
+  "itemsIngested": 150,
+  "errors": [],
+  "timestamp": "2025-01-15T12:30:00Z",
+  "metadata": {
+    "productsCreated": 5,
+    "productsUpdated": 145,
+    "retailerItemsUpserted": 150
+  }
+}
+```
+
+**Error Response:**
+```json
+{
+  "success": false,
+  "itemsIngested": 0,
+  "errors": [
+    "Failed to navigate to URL: timeout exceeded",
+    "Selector '.product-card' not found on page"
+  ],
+  "timestamp": "2025-01-15T12:30:00Z"
+}
+```
+
+### Health Metrics
+
+Each ingestion config tracks:
+- **lastRun**: Timestamp of most recent execution
+- **successCount**: Total successful runs
+- **failureCount**: Total failed runs
+
+Metrics are automatically updated after each manual trigger or scheduled run.
+
+### Cron Schedule Format
+
+Schedules use standard cron syntax:
+
+```
+┌───────────── minute (0 - 59)
+│ ┌───────────── hour (0 - 23)
+│ │ ┌───────────── day of month (1 - 31)
+│ │ │ ┌───────────── month (1 - 12)
+│ │ │ │ ┌───────────── day of week (0 - 6) (Sunday=0)
+│ │ │ │ │
+* * * * *
+```
+
+**Examples:**
+- `0 */6 * * *` - Every 6 hours
+- `0 */4 * * *` - Every 4 hours
+- `0 2 * * *` - Daily at 2:00 AM
+- `0 0 * * 0` - Weekly on Sunday at midnight
+
+### Seeding Ingestion Configs
+
+The seed script includes a Checkers Sixty60 scraper configuration:
+
+```bash
+# Run seed script (includes retailers + ingestion configs)
+pnpm nx run database:seed
+```
+
+**Note:** The seeded config is **disabled by default** (`isActive: false`) for safety. Enable it after verifying the CSS selectors are correct for the target website.
+
+### Web Scraper Implementation
+
+The `ScraperStrategy` uses Playwright for headless browser automation:
+
+**Features:**
+- Headless Chromium browser
+- Configurable CSS selectors
+- Automatic product + retailer item creation
+- Price history tracking
+- Error handling with browser cleanup
+- Validation of URLs and selectors
+
+**Product Extraction Flow:**
+1. Launch headless browser
+2. Navigate to retailer URL
+3. Wait for product container selector
+4. Extract product data using CSS selectors
+5. Create/update Product records
+6. Upsert RetailerItem records with current pricing
+7. Return ingestion result with metrics
+
+**Error Handling:**
+- Browser cleanup on failure
+- Detailed error logging
+- Graceful degradation (partial success possible)
+- Health metrics tracking
+
+### Security Considerations
+
+- All admin endpoints require JWT + ADMIN role
+- Ingestion configs disabled by default
+- URLs validated before scraping
+- No execution of JavaScript from scraped pages
+- Browser runs in sandboxed mode
+
+### Future Enhancements
+
+- API strategy for direct retailer integrations
+- Manual entry strategy for small retailers
+- Scheduled ingestion using node-cron
+- Ingestion job queue with Bull
+- Rate limiting per retailer
+- Proxy rotation for scraping
+- Retry logic with exponential backoff
+
+---
+
 ## 🔑 Environment Variables
 
 Create a `.env` file in the root with:
