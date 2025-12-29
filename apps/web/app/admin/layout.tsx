@@ -5,9 +5,9 @@ export default async function AdminLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // TODO: Add BetterAuth role check - redirect if not admin
+  // TODO: Add auth role check - redirect if not admin
   // const session = await getSession();
-  // if (!session || session.user.role !== 'admin') {
+  // if (!session || !session.user.roles.includes('ADMIN')) {
   //   redirect('/login');
   // }
 

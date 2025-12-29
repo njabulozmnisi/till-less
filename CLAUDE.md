@@ -191,14 +191,27 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 
 | Branch Type | Merge Into | After Merge |
 |------------|------------|-------------|
-| `feature/*` | `develop` | checkout `develop` → pull `develop` → push (if safe) |
-| `bugfix/*` | `develop` | checkout `develop` → pull `develop` → push (if safe) |
-| `release/*` | `main` | tag `vX.Y.Z` → back‑merge `main` → `develop` |
-| `hotfix/*` | `main` | tag → back‑merge `main` → `develop` |
+| `feature/*` | `develop` | checkout `develop` → pull `develop` → **PUSH** `origin develop` |
+| `bugfix/*` | `develop` | checkout `develop` → pull `develop` → **PUSH** `origin develop` |
+| `release/*` | `main` | tag `vX.Y.Z` → **PUSH** `origin main --tags` → back‑merge to `develop` → **PUSH** `origin develop` |
+| `hotfix/*` | `main` | tag `vX.Y.Z` → **PUSH** `origin main --tags` → back‑merge to `develop` → **PUSH** `origin develop` |
 
-**Safe Push Gate** — Push only if BOTH are true:  
-1) the merge succeeded (exit code 0), and  
-2) the current branch is `develop`.
+**CRITICAL: Always Push After Successful Merge**
+
+After merging and before any post-merge updates:
+1. Verify merge succeeded (exit code 0)
+2. Verify you're on the correct target branch (`develop` or `main`)
+3. **PUSH to remote immediately**: `git push origin <branch>`
+4. For releases/hotfixes: Also push tags: `git push origin main --tags`
+
+**Sequence Example (feature → develop):**
+```bash
+git checkout develop
+git pull origin develop
+git merge feature/123-add-feature --no-ff
+# Verify merge succeeded
+git push origin develop  # ← REQUIRED STEP
+```
 
 > Branches remain available for traceability; do **not** delete them.
 
@@ -206,18 +219,31 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 
 ## 6) Post‑Merge Updates (Agent responsibilities)
 
+**PREREQUISITE:** Remote push must be complete before proceeding with these updates.
+
+**After successful merge AND push to remote:**
+
 - **Issue updates**
   - If merged to default branch (`main`), ensure the Issue is **closed** (via `Closes #<issue>` or manually)
   - If merged to `develop`, **comment** with the merge commit link and keep the Issue open until release (or close when appropriate)
   - Move the Issue in **Project** or **Milestone**
 
-- **Repository updates**
-  - `git checkout develop`
-  - `git pull origin develop`
-  - If safe, `git push origin develop`
+- **Repository state verification**
+  - Verify remote is updated: `git log origin/develop --oneline -5` (or `origin/main`)
+  - Confirm merge commit appears in remote history
+  - For releases: Verify tags pushed: `git ls-remote --tags origin`
 
 - **Documentation**
+  - Update local story file status to "Done"
   - If you maintain release notes, add the Issue and summary under the relevant version
+  - Update README.md if new features/setup steps were added
+
+**Complete Post-Merge Checklist:**
+1. ✅ Merge succeeded locally
+2. ✅ Pushed to remote (`origin/develop` or `origin/main`)
+3. ✅ Issue updated with merge status
+4. ✅ Story file status updated
+5. ✅ Documentation updated (if applicable)
 
 ---
 
@@ -228,6 +254,8 @@ Once the GitHub Issue exists, the agent must **post a PR review as a comment on 
 - Use the **Issue number in branch names and commits**
 - Post a **PR review as an Issue comment** before merge (no repo files)
 - Follow **Git Flow** for merges
-- After merge, **checkout `develop`**, **pull `develop`**, and **push only if safe**
+- After **EVERY successful merge**, **IMMEDIATELY push to remote**: `git push origin <branch>`
+- For releases/hotfixes, also **push tags**: `git push origin main --tags`
+- **Verify remote push succeeded** before post-merge updates
 - **Do not delete branches** after merge
 - Keep work small, clear, and traceable
