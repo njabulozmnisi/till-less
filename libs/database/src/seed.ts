@@ -89,7 +89,6 @@ async function seedIngestionConfigs() {
   }
 
   const ingestionConfig = {
-    name: 'Checkers Sixty60 Product Scraper',
     strategy: 'SCRAPER' as const,
     config: {
       url: 'https://www.sixty60.co.za/products',
@@ -101,23 +100,31 @@ async function seedIngestionConfigs() {
         image: '.product-image img',
       },
     },
-    schedule: '0 */6 * * *', // Every 6 hours
+    cadence: '0 */6 * * *', // Every 6 hours
     isActive: false, // Disabled by default for safety
     retailerId: checkersRetailer.id,
   };
 
-  await prisma.retailerIngestionConfig.upsert({
+  // Check if config already exists
+  const existingConfig = await prisma.retailerIngestionConfig.findFirst({
     where: {
-      retailerId_name: {
-        retailerId: checkersRetailer.id,
-        name: ingestionConfig.name,
-      },
+      retailerId: checkersRetailer.id,
+      strategy: ingestionConfig.strategy,
     },
-    update: ingestionConfig,
-    create: ingestionConfig,
   });
 
-  console.log(`  ✓ Upserted ingestion config: ${ingestionConfig.name}`);
+  if (existingConfig) {
+    await prisma.retailerIngestionConfig.update({
+      where: { id: existingConfig.id },
+      data: ingestionConfig,
+    });
+  } else {
+    await prisma.retailerIngestionConfig.create({
+      data: ingestionConfig,
+    });
+  }
+
+  console.log(`  ✓ Upserted ingestion config for ${checkersRetailer.name}`);
   console.log('✓ Ingestion configs seeded successfully\n');
 }
 

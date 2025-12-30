@@ -53,10 +53,10 @@ export class IngestionService {
 
     return this.prisma.retailerIngestionConfig.create({
       data: {
-        name: dto.name,
         strategy: dto.strategy,
         config: dto.config as any,
-        schedule: dto.schedule || null,
+        priority: dto.priority ?? 0,
+        cadence: dto.cadence || null,
         isActive: dto.isActive ?? true,
         retailerId,
       },
@@ -72,10 +72,10 @@ export class IngestionService {
     return this.prisma.retailerIngestionConfig.update({
       where: { id },
       data: {
-        name: dto.name,
         strategy: dto.strategy,
         config: dto.config as any,
-        schedule: dto.schedule,
+        priority: dto.priority,
+        cadence: dto.cadence,
         isActive: dto.isActive,
       },
     });
@@ -98,7 +98,7 @@ export class IngestionService {
   async triggerIngestion(configId: string): Promise<IngestionResult> {
     const config = await this.findOne(configId);
 
-    this.logger.log(`Triggering ingestion for config ${configId} (${config.name})`);
+    this.logger.log(`Triggering ingestion for config ${configId} (${config.strategy})`);
 
     try {
       // Get the strategy
@@ -134,7 +134,7 @@ export class IngestionService {
         },
       });
 
-      this.logger.error(`Ingestion failed for config ${configId}: ${error.message}`);
+      this.logger.error(`Ingestion failed for config ${configId}: ${error instanceof Error ? error.message : String(error)}`);
 
       throw error;
     }

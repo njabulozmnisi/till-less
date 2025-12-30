@@ -65,7 +65,7 @@ export class ScraperStrategy implements IDataAcquisitionStrategy {
           await this.storeProduct(product, retailerId);
           itemsIngested++;
         } catch (error) {
-          const errorMsg = `Failed to store product ${product.name}: ${error.message}`;
+          const errorMsg = `Failed to store product ${product.name}: ${error instanceof Error ? error.message : String(error)}`;
           this.logger.error(errorMsg);
           errors.push(errorMsg);
         }
@@ -89,7 +89,7 @@ export class ScraperStrategy implements IDataAcquisitionStrategy {
         await browser.close();
       }
 
-      const errorMsg = `Scraping failed: ${error.message}`;
+      const errorMsg = `Scraping failed: ${error instanceof Error ? error.message : String(error)}`;
       this.logger.error(errorMsg);
       errors.push(errorMsg);
 
@@ -150,41 +150,28 @@ export class ScraperStrategy implements IDataAcquisitionStrategy {
    * Store product in database
    */
   private async storeProduct(product: ScrapedProduct, retailerId: string): Promise<void> {
-    // Find or create product
-    let dbProduct = await this.prisma.product.findFirst({
-      where: { name: product.name },
-    });
+    // Create or update retailer item directly (no separate Product table for now)
+    const sku = product.sku || `generated-${product.name.toLowerCase().replace(/\s+/g, '-')}`;
 
-    if (!dbProduct) {
-      dbProduct = await this.prisma.product.create({
-        data: {
-          name: product.name,
-          description: product.description || null,
-          imageUrl: product.imageUrl || null,
-          category: product.category || 'Uncategorized',
-        },
-      });
-    }
-
-    // Create or update retailer item
     await this.prisma.retailerItem.upsert({
       where: {
-        retailerId_productId: {
+        retailerId_sku: {
           retailerId,
-          productId: dbProduct.id,
+          sku,
         },
       },
       update: {
+        name: product.name,
         price: product.price,
         inStock: product.inStock,
         lastScraped: new Date(),
       },
       create: {
         retailerId,
-        productId: dbProduct.id,
+        sku,
+        name: product.name,
         price: product.price,
         inStock: product.inStock,
-        sku: product.sku || null,
         lastScraped: new Date(),
       },
     });

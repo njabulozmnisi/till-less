@@ -1,10 +1,7 @@
-import { IsString, IsEnum, IsObject, IsOptional, IsBoolean } from 'class-validator';
+import { IsString, IsEnum, IsObject, IsOptional, IsBoolean, IsInt } from 'class-validator';
 import { IngestionStrategy } from '@prisma/client';
 
 export class CreateIngestionConfigDto {
-  @IsString()
-  name!: string;
-
   @IsEnum(IngestionStrategy)
   strategy!: IngestionStrategy;
 
@@ -12,8 +9,12 @@ export class CreateIngestionConfigDto {
   config!: Record<string, any>;
 
   @IsOptional()
+  @IsInt()
+  priority?: number;
+
+  @IsOptional()
   @IsString()
-  schedule?: string;
+  cadence?: string;
 
   @IsOptional()
   @IsBoolean()
