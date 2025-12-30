@@ -69,6 +69,7 @@ model Retailer {
   stores           Store[]
   items            RetailerItem[]
   loyaltyPrograms  LoyaltyProgram[]
+  productPrices    ProductPrice[]
 
   @@map("retailers")
 }
@@ -192,16 +193,46 @@ model LoyaltyProgram {
 // ============================================================================
 
 model Product {
-  id       String  @id @default(uuid())
+  id       String        @id @default(uuid())
   name     String
+  barcode  String?       @unique
   brand    String?
+  size     String?
+  imageUrl String?
   category String
+
+  // Relations
+  prices ProductPrice[]
 
   // Metadata
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("products")
+}
+
+model ProductPrice {
+  id           String   @id @default(uuid())
+  productId    String
+  retailerId   String
+  price        Decimal
+  loyaltyPrice Decimal?
+  inStock      Boolean  @default(true)
+  source       String   // WEB_SCRAPE, API, PDF, MANUAL, CROWDSOURCED
+  confidence   Float    @default(1.0)
+  snapshotDate DateTime @default(now())
+  outlier      Boolean  @default(false)
+
+  // Relations
+  product  Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  retailer Retailer @relation(fields: [retailerId], references: [id], onDelete: Cascade)
+
+  // Metadata
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([productId, retailerId, snapshotDate])
+  @@map("product_prices")
 }
 
 model RetailerItem {
